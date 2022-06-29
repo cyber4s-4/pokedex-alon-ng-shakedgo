@@ -15,7 +15,7 @@ class Module {
 	}
 
 	updateSearchResults() {
-		let searchTerm = (document.getElementById("search") as HTMLInputElement).value;
+		let searchTerm = (document.getElementById("search") as HTMLInputElement).value.toLocaleLowerCase();
 		let validPokemons = this.pokemonNames.then((pokemons) =>
 			pokemons.filter((pokemon) => pokemon.startsWith(searchTerm))
 		);
@@ -23,10 +23,12 @@ class Module {
 		let ulString = "";
 
 		validPokemons.then((pokemons) => {
-			pokemons.forEach((pokemon) => {
-				let searchResultTemplateCopy = searchResultTemplate;
-				ulString += searchResultTemplateCopy.replace(/%name/g, pokemon);
-			});
+			if (searchTerm !== "") {
+				pokemons.forEach((pokemon) => {
+					let searchResultTemplateCopy = searchResultTemplate;
+					ulString += searchResultTemplateCopy.replace(/%name/g, pokemon);
+				});
+			}
 
 			let searchResults = document.getElementById("search-results")!;
 			searchResults.innerHTML = ulString;

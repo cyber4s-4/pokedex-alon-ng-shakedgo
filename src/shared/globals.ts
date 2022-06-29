@@ -15,7 +15,7 @@ export interface PokemonData {
 	order: number;
 	past_types: any[];
 	species: {};
-	sprites: {};
+	sprites: any;
 	stats: [];
 	types: [];
 	weight: number;
