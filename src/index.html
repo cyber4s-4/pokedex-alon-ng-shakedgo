@@ -9,5 +9,17 @@
 		<link rel="stylesheet" href="styles.css" />
 		<script src="app.js"></script>
 	</head>
-	<body></body>
+	<body>
+		<div class="search-bar-container">
+			<input
+				id="search"
+				class="search-bar"
+				placeholder="search bar"
+				type="text"
+				onkeyup="app.module.updateSearchResults()"
+				autocomplete="off"
+			/>
+			<ul id="search-results" class="search-results"></ul>
+		</div>
+	</body>
 </html>

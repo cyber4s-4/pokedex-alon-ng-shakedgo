@@ -1,18 +1,21 @@
 module.exports = {
-  mode: 'development',
-  entry: "./dist/tsc/app.js",
-  devtool: "source-map",
-  output: {
-    filename: "app.js",
-    library: "app"
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        enforce: "pre",
-        use: ["source-map-loader"],
-      },
-    ],
-  }
-}
+	mode: "development",
+	entry: {
+		app: "./dist/tsc/app.js",
+		pokemon: "./dist/tsc/pokemon.js",
+	},
+	devtool: "source-map",
+	output: {
+		filename: "[name].js",
+		library: "[name]",
+	},
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				enforce: "pre",
+				use: ["source-map-loader"],
+			},
+		],
+	},
+};
