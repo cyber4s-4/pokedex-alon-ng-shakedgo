@@ -16,11 +16,19 @@ class Module {
         });
     }
   }
+
+  // Renders PokemonCopmonent.
   renderPokemon(data: any) {
     let parent = document.getElementById("pokemons");
     let pokemon = new PokemonCopmonent(parent, data);
-    console.log(pokemon);
     pokemon.render();
+  }
+
+  // Catch Pokemons - add to localStorage.
+  catch() {
+    const searchParams = new URLSearchParams(location.search.slice(1));
+    let name = searchParams.get("pokemon");
+    localStorage.setItem(name!.toString(), name!.toString()); // TODO: Change [key,value]
   }
 }
 

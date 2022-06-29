@@ -1,0 +1,39 @@
+@mixin flexbox($rl, $dir) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: $rl;
+  flex-direction: $dir;
+}
+#pokemons {
+  font-size: 28px;
+
+  position: absolute;
+  left: 45%;
+  top: 30%;
+  .pokemon-comp {
+    @include flexbox(center, column);
+    width: 170px;
+    border: solid 1px black;
+    border-radius: 8px;
+    .pokemon-img {
+      width: 170px;
+    }
+    .pokemon-name {
+      @include flexbox(center, row);
+      padding: 5px;
+      font-weight: bold;
+    }
+    .pokemon-functions {
+      @include flexbox(space-around, row);
+      .pokeball-img {
+        padding: 5px;
+      }
+      .pokemon-abilities {
+        color: red;
+        text-decoration: none;
+        line-height: 45px;
+        font-size: 20px;
+      }
+    }
+  }
+}
