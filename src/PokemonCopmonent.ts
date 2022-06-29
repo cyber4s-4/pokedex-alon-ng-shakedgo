@@ -1,10 +1,14 @@
+import { PokemonData } from "./shared/globals";
+
 export class PokemonCopmonent {
-  parent: HTMLElement | null;
-  data: any;
-  constructor(parent: HTMLElement | null, data: any) {
-    this.parent = parent;
-    this.data = data;
-  }
+	parent: HTMLElement;
+	data: PokemonData;
+  
+	constructor(parent: HTMLElement, data: PokemonData) {
+		this.parent = parent;
+		this.data = data;
+	}
+  
   render() {
     return (this.parent!.innerHTML += `<div class="pokemon-comp" id="pokemon-${this.data.sprites.front_default}">
   <img class="pokemon-img" src="${this.data.sprites.front_default}">
