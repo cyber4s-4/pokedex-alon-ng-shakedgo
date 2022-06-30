@@ -1,4 +1,7 @@
 import { SearchResult } from "./components/SearchResultComponent";
+import { checkForBag } from "./shared/globals";
+
+checkForBag();
 
 class Module {
 	pokemonNames: Promise<string[]>;

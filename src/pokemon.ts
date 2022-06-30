@@ -1,5 +1,7 @@
 import { PokemonCopmonent } from "./components/PokemonCopmonent";
-import { PokemonData } from "./shared/globals";
+import { checkForBag, PokemonData } from "./shared/globals";
+
+checkForBag();
 
 class Module {
 	pokemonData!: PokemonData;

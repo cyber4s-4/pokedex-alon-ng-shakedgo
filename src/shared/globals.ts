@@ -20,3 +20,9 @@ export interface PokemonData {
 	types: [];
 	weight: number;
 }
+
+export function checkForBag() {
+	if (!localStorage.getItem("bag")) {
+		localStorage.setItem("bag", "");
+	}
+}
