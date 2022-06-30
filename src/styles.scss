@@ -32,6 +32,7 @@ body {
 			@include flexbox(space-around, row);
 			.pokeball-img {
 				padding: 5px;
+				cursor: pointer;
 			}
 			.pokemon-abilities {
 				color: red;

@@ -18,17 +18,10 @@ class Module {
 	}
 
 	// Renders PokemonCopmonent.
-	renderPokemon(data: any) {
+	renderPokemon(data: PokemonData) {
 		let parent = document.getElementById("pokemons")!;
 		let pokemon = new PokemonCopmonent(parent, data);
 		pokemon.render();
-	}
-
-	// Catch Pokemons - add to localStorage.
-	catch() {
-		const searchParams = new URLSearchParams(location.search.slice(1));
-		let name = searchParams.get("pokemon");
-		localStorage.setItem(name!.toString(), name!.toString()); // TODO: Change [key,value]
 	}
 }
 

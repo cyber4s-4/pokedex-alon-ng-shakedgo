@@ -28,6 +28,11 @@ gulp.task("index", () => {
 	return gulp.src(["./src/index.html", "./src/pokemon.html", "./src/favicon.ico"]).pipe(gulp.dest("./dist"));
 });
 
+// Transfers images
+gulp.task("images", () => {
+	return gulp.src(["./src/images/**.png"]).pipe(gulp.dest("./dist"));
+});
+
 // Browser Sync
 gulp.task("browser-sync", () => {
 	browserSync.init({
@@ -78,6 +83,7 @@ gulp.task(
 		"start",
 		"scss",
 		"index",
+		"images",
 		"tsc",
 		"build",
 		gulp.parallel("browser-sync", "browser-sync-watch", "watch-scss", "watch-html", "watch-tsc", "tsc-w")
