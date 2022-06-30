@@ -1,4 +1,4 @@
-import { searchResultTemplate } from "./shared/globals";
+import { SearchResult } from "./components/SearchResultComponent";
 
 class Module {
 	pokemonNames: Promise<string[]>;
@@ -22,16 +22,17 @@ class Module {
 
 		let ulString = "";
 
+		let searchResultsUL = document.getElementById("search-results")!;
+
 		validPokemons.then((pokemons) => {
 			if (searchTerm !== "") {
 				pokemons.forEach((pokemon) => {
-					let searchResultTemplateCopy = searchResultTemplate;
-					ulString += searchResultTemplateCopy.replace(/%name/g, pokemon);
+					let searchResult = new SearchResult(pokemon, searchResultsUL);
+					ulString += searchResult.layout;
 				});
 			}
 
-			let searchResults = document.getElementById("search-results")!;
-			searchResults.innerHTML = ulString;
+			searchResultsUL.innerHTML = ulString;
 		});
 	}
 }

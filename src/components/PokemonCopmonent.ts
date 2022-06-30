@@ -1,6 +1,6 @@
 import { PokemonData } from "../shared/globals";
 
-const cardTemplate = `<div class="pokemon-comp" id="pokemon-%name">
+const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 <img class="pokemon-img" src="%sprite">
   <div class="pokemon-name">%name</div>
   <div class="pokemon-functions">
@@ -20,7 +20,7 @@ export class PokemonCopmonent {
 	}
 
 	render() {
-		let cardLayout = cardTemplate;
+		let cardLayout = layoutTemplate;
 		cardLayout = cardLayout.replace(/%name/g, this.data.name);
 		cardLayout = cardLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		this.parent.innerHTML = cardLayout;
