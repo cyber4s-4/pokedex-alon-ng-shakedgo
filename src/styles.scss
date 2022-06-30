@@ -1,82 +1,83 @@
 @mixin flexbox($rl, $dir) {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: $rl;
-  flex-direction: $dir;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: $rl;
+	flex-direction: $dir;
 }
+
+body {
+	font-family: Tahoma;
+}
+
 #pokemons {
-  font-size: 28px;
+	font-size: 28px;
 
-  position: absolute;
-  left: 45%;
-  top: 30%;
-  .pokemon-comp {
-    @include flexbox(center, column);
-    width: 170px;
-    border: solid 1px black;
-    border-radius: 8px;
-    .pokemon-img {
-      width: 170px;
-    }
-    .pokemon-name {
-      @include flexbox(center, row);
-      padding: 5px;
-      font-weight: bold;
-    }
-    .pokemon-functions {
-      @include flexbox(space-around, row);
-      .pokeball-img {
-        padding: 5px;
-      }
-      .pokemon-abilities {
-        color: red;
-        text-decoration: none;
-        line-height: 45px;
-        font-size: 20px;
-      }
-    }
-  }
+	position: absolute;
+	left: 45%;
+	top: 30%;
+	.pokemon-comp {
+		@include flexbox(center, column);
+		width: 170px;
+		border: solid 1px black;
+		border-radius: 8px;
+		.pokemon-img {
+			width: 170px;
+		}
+		.pokemon-name {
+			@include flexbox(center, row);
+			padding: 5px;
+			font-weight: bold;
+		}
+		.pokemon-functions {
+			@include flexbox(space-around, row);
+			.pokeball-img {
+				padding: 5px;
+			}
+			.pokemon-abilities {
+				color: red;
+				text-decoration: none;
+				line-height: 45px;
+				font-size: 20px;
+			}
+		}
+	}
+}
 
-  body {
-    font-family: Tahoma;
-  }
+.search-bar-container {
+	position: relative;
+	margin: 20px auto;
+	width: 40vw;
 
-  .search-bar-container {
-    position: relative;
-    margin: 20px auto;
-    width: 40vw;
+	.search-bar {
+		width: 100%;
+		height: 40px;
+		text-indent: 20px;
+		font-size: 16px;
+		padding: 0;
+		border: 0;
+		outline: 1px rgb(30, 30, 30) solid;
+		border-radius: 2px;
+	}
 
-    .search-bar {
-      width: 100%;
-      height: 40px;
-      text-indent: 20px;
-      font-size: 16px;
-      padding: 0;
-      border: 0;
-      outline: 1px rgb(30, 30, 30) solid;
-      border-radius: 2px;
-    }
+	.search-results {
+		position: absolute;
+		top: 41px;
+		width: 100%;
+		max-height: 400px;
+		overflow: auto;
+		padding: 0;
+		margin: 0;
+		background-color: rgb(230, 230, 230);
 
-    .search-results {
-      position: absolute;
-      top: 41px;
-      width: 100%;
-      max-height: 400px;
-      overflow: auto;
-      padding: 0;
-      margin: 0;
-      background-color: rgb(230, 230, 230);
+		li {
+			font-size: 16px;
+			padding: 10px;
+			text-indent: 20px;
+		}
 
-      li {
-        font-size: 16px;
-        padding: 10px;
-        text-indent: 20px;
-      }
-
-      li:hover {
-        background-color: rgb(200, 200, 200);
-        cursor: pointer;
-      }
-    }
-  }
+		li:hover {
+			background-color: rgb(200, 200, 200);
+			cursor: pointer;
+		}
+	}
 }
