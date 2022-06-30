@@ -1,7 +1,16 @@
 export const searchResultTemplate = `<li id='%name' onclick='location.href=location.origin + "/pokemon.html?pokemon=%name"'>%name</li>`;
 
+export interface AbilityData {
+	ability: {
+		name: string;
+		url: string;
+	};
+	is_hidden: boolean;
+	slot: number;
+}
+
 export interface PokemonData {
-	abilities: [];
+	abilities: AbilityData[];
 	base_experience: number;
 	forms: [];
 	game_indices: [];

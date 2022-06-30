@@ -6,6 +6,7 @@ const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
   <div class="pokemon-functions">
   <img class="pokeball-img" src="./pokeball-open.png" width="40px"/></a>
   <a class="pokemon-abilities" href=''>Abilities</a>
+  <div id="abilities"></div>
   </div>
 </div>`;
 
@@ -18,7 +19,6 @@ export class PokemonCopmonent {
 		this.parent = parent;
 		this.data = data;
 		const bag = localStorage.getItem("bag")!.split(",");
-		console.log(bag.includes(this.data.name));
 
 		this.isCaugth = bag.includes(this.data.name);
 	}
