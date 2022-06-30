@@ -1,13 +1,13 @@
 import { PokemonData } from "../shared/globals";
+import { AbilityComponent } from "./AbilityComponent";
 
 const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 <img class="pokemon-img" src="%sprite">
+<div class="pokemon-cont">
+  <img class="pokeball-img" src="./pokeball-open.png"/></a>
   <div class="pokemon-name">%name</div>
-  <div class="pokemon-functions">
-  <img class="pokeball-img" src="./pokeball-open.png" width="40px"/></a>
-  <a class="pokemon-abilities" href=''>Abilities</a>
-  <div id="abilities"></div>
   </div>
+  <div id="abilities"></div>
 </div>`;
 
 export class PokemonCopmonent {
@@ -31,6 +31,12 @@ export class PokemonCopmonent {
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
 		img.addEventListener("click", () => this.catch());
 		img.src = !this.isCaugth ? "./pokeball-open.png" : "./pokeball-closed.png";
+
+		let abilityParent = document.getElementById("abilities")!;
+		for (let i = 0; i < this.data.abilities.length; i++) {
+			let ability = new AbilityComponent(abilityParent, this.data.abilities[i]);
+			ability.render();
+		}
 	}
 
 	// Catch Pokemons - add to localStorage.

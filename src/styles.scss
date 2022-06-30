@@ -4,42 +4,36 @@
 	justify-content: $rl;
 	flex-direction: $dir;
 }
-
 body {
 	font-family: Tahoma;
 }
 
 #pokemons {
 	font-size: 28px;
-
-	position: absolute;
-	left: 45%;
-	top: 30%;
 	.pokemon-comp {
-		@include flexbox(center, column);
-		width: 170px;
-		border: solid 1px black;
-		border-radius: 8px;
+		@include flexbox(left, column);
 		.pokemon-img {
+			margin-left: 20px;
 			width: 170px;
 		}
-		.pokemon-name {
-			@include flexbox(center, row);
-			padding: 5px;
-			font-weight: bold;
-		}
-		.pokemon-functions {
-			@include flexbox(space-around, row);
+		.pokemon-cont {
+			@include flexbox(left, row);
 			.pokeball-img {
+				width: 70px;
+				height: 70px;
+				padding: 5px;
+				cursor: pointer;
 				padding: 5px;
 				cursor: pointer;
 			}
-			.pokemon-abilities {
-				color: red;
-				text-decoration: none;
-				line-height: 45px;
-				font-size: 20px;
+			.pokemon-name {
+				line-height: 70px;
+				padding: 5px;
+				font-weight: bold;
 			}
+		}
+		#abilities {
+			@include flexbox(space-around, column);
 		}
 	}
 }
