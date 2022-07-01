@@ -3,7 +3,7 @@ import { checkForBag, PokemonData } from "./shared/globals";
 
 checkForBag();
 
-class Module {
+export class Pokemon {
 	pokemonData!: PokemonData;
 
 	onLoad() {
@@ -14,21 +14,20 @@ class Module {
 				.then((res) => res.json())
 				.then((json) => (this.pokemonData = json as PokemonData))
 				.then((res) => {
-					this.renderPokemon(res);
+					this.renderPokemon(res, document.getElementById("pokemons")!);
 				});
 		}
 	}
 
 	// Renders PokemonCopmonent.
-	renderPokemon(data: PokemonData) {
-		let parent = document.getElementById("pokemons")!;
+	renderPokemon(data: PokemonData, parent: HTMLElement) {
 		let pokemon = new PokemonCopmonent(parent, data);
 		pokemon.render();
 	}
 }
 
-export const module = new Module();
+export const pokemon = new Pokemon();
 
 window.addEventListener("load", () => {
-	module.onLoad();
+	pokemon.onLoad();
 });
