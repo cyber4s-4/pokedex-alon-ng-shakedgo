@@ -1,8 +1,13 @@
 import { AbilityData } from "src/shared/globals";
 
-const layoutTemplate = `<div class="ability-%name">Ability Name: %name</div>
-<div class="ability-%status">Visibility: %status</div>	
-`;
+const layoutTemplate = `<div class="ability-container">
+<div class="ability-%name">
+	<span class="field-label">Ability Name: </span><span class="field-value">%name</span>
+</div>
+<div class="ability-%visibility">
+	<span class="field-label">Visibility: </span><span class="field-value">%visibility</span>
+</div>
+</div>`;
 
 export class AbilityComponent {
 	parent: HTMLElement;
@@ -14,14 +19,12 @@ export class AbilityComponent {
 	}
 
 	render() {
-		let father = document.createElement("div");
-		father.setAttribute("id", "abilityParent");
-
 		let abilityLayout = layoutTemplate;
 		abilityLayout = abilityLayout.replace(/%name/g, this.data.ability.name);
-		let abilityStatus = this.data.is_hidden ? "Hidden" : "Visible";
-		abilityLayout = abilityLayout.replace(/%status/g, abilityStatus);
-		father.innerHTML = abilityLayout;
-		this.parent.appendChild(father);
+		let abilityVisibility = this.data.is_hidden ? "Hidden" : "Visible";
+		abilityLayout = abilityLayout.replace(/%visibility/g, abilityVisibility);
+		abilityLayout = abilityLayout.replace(/%status-lower-case/g, abilityVisibility.toLowerCase());
+
+		this.parent.innerHTML += abilityLayout;
 	}
 }

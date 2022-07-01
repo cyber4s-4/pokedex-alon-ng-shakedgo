@@ -17,7 +17,7 @@ export class BagComponent {
 
 		// get data of each pokemon and add cardLayout to parent
 		for (const pokemon in bag) {
-			let pokemonCard = new PokemonCopmonent(document.getElementById("bag")!, bag[pokemon]); // TODO: refactor pokemon render;
+			let pokemonCard = new PokemonCopmonent(document.getElementById("bag")!, bag[pokemon]);
 			pokemonCard.renderAsCard();
 		}
 	}
