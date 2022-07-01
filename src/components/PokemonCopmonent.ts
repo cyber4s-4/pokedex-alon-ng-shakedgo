@@ -1,5 +1,6 @@
 import { PokemonData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
+import { TypeComponent } from "./TypeCompnent";
 
 const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 <div class="pokemon-header">
@@ -12,14 +13,17 @@ const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 
 <div id="pokemon-basics" class="pokemon-basics">
 	<div class="field-container" id="height">
-		<span class="field-label">Height: </span><span class="field-value">%height</span>
+		<span class="field-label">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
 	</div>
 	<div class="field-container" id="weight">
-		<span class="field-label">Weight: </span><span class="field-value">%weight</span>
+		<span class="field-label">Weight: </span><span class="field-value">%weight kg</span>
 	</div>
-	<div class="pokemon-types" id="pokemon-types"><span class="field-label">Type:</span> electric</div>
+	<div class="pokemon-types-container" id="pokemon-types-container">
+		<span class="field-label">Types:</span>
+		<span class="pokemon-types" id="pokemon-types"></span>
+	</div>
 
-	<div id="abilities">
+	<div id="pokemon-abilities" class="pokemon-abilities">
 		<h3>Abilities</h3>
 	</div>
 
@@ -56,6 +60,7 @@ export class PokemonCopmonent {
 		pokemonLayout = pokemonLayout.replace(/%name/g, this.data.name);
 		pokemonLayout = pokemonLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		pokemonLayout = pokemonLayout.replace(/%height/g, this.data.height.toString());
+		pokemonLayout = pokemonLayout.replace(/%cm/g, (this.data.height * 30.48).toString());
 		pokemonLayout = pokemonLayout.replace(/%weight/g, this.data.weight.toString());
 
 		pokemonLayout = pokemonLayout.replace(/%type/g, this.data.types[0]!.type.name); // TODO: ??
@@ -65,10 +70,16 @@ export class PokemonCopmonent {
 		img.addEventListener("click", () => this.catch());
 		img.src = !this.isCaugth ? "./pokeball-open.png" : "./pokeball-closed.png";
 
-		let abilityContainer = document.getElementById("abilities")!;
+		let abilitiesContainer = document.getElementById("pokemon-abilities")!;
 		for (const abilityData of this.data.abilities) {
-			let ability = new AbilityComponent(abilityContainer, abilityData);
+			let ability = new AbilityComponent(abilitiesContainer, abilityData);
 			ability.render();
+		}
+
+		let typesContainer = document.getElementById("pokemon-types")!;
+		for (const typeData of this.data.types) {
+			let type = new TypeComponent(typesContainer, typeData.type);
+			type.render();
 		}
 	}
 

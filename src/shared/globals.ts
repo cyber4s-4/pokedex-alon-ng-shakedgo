@@ -38,6 +38,11 @@ export interface PokemonData {
 	weight: number;
 }
 
+export interface TypeData {
+	name: string;
+	url: string;
+}
+
 export interface Bag {
 	[index: string]: PokemonData;
 }

@@ -1,6 +1,14 @@
 $black: rgb(30, 30, 30);
 $white: rgb(230, 230, 230);
 
+@mixin type-color($mainColor, $secondaryColor) {
+	background-color: $mainColor;
+	color: $secondaryColor;
+	border: 1px $secondaryColor solid;
+	border-radius: 10px;
+	padding: 3px 5px;
+}
+
 @mixin flexbox($rl, $dir) {
 	display: flex;
 	flex-wrap: wrap;
@@ -8,7 +16,7 @@ $white: rgb(230, 230, 230);
 	flex-direction: $dir;
 }
 
-@mixin borderImg($color) {
+@mixin border-img($color) {
 	-webkit-filter: drop-shadow(2px 2px 0 $color) drop-shadow(-2px -2px 0 $color) drop-shadow(-2px 2px 0 $color)
 		drop-shadow(2px -2px 0 $color);
 	filter: drop-shadow(2px 2px 0 $color) drop-shadow(-2px -2px 0 $color) drop-shadow(-2px 2px 0 $color)
@@ -69,7 +77,7 @@ body {
 
 			.pokemon-img {
 				width: 170px;
-				@include borderImg($white);
+				@include border-img($white);
 			}
 		}
 
@@ -77,7 +85,7 @@ body {
 			width: 500px;
 			margin: 0 auto;
 
-			#abilities {
+			.pokemon-abilities {
 				@include flexbox(space-around, column);
 				h3 {
 					margin: 20px 0 0 0;
@@ -89,6 +97,86 @@ body {
 					padding: 2px;
 					border: 1px $black solid;
 					border-radius: 3px;
+				}
+			}
+			.pokemon-types-container {
+				margin-top: 5px;
+				.pokemon-types {
+					.pokemon-type {
+						margin-left: 5px;
+					}
+
+					.pokemon-type-water {
+						@include type-color(rgb(0, 105, 234), $white);
+					}
+
+					.pokemon-type-grass {
+						@include type-color(rgb(36, 166, 0), $white);
+					}
+
+					.pokemon-type-fairy {
+						@include type-color(rgb(249, 186, 255), $white);
+					}
+
+					.pokemon-type-steel {
+						@include type-color(rgb(178, 178, 178), $black);
+					}
+
+					.pokemon-type-dark {
+						@include type-color(rgb(115, 75, 1), $white);
+					}
+
+					.pokemon-type-dragon {
+						@include type-color(rgb(64, 33, 178), $white);
+					}
+
+					.pokemon-type-ghost {
+						@include type-color(rgb(76, 51, 91), $white);
+					}
+
+					.pokemon-type-rock {
+						@include type-color(rgb(168, 126, 0), $white);
+					}
+
+					.pokemon-type-bug {
+						@include type-color(rgb(172, 182, 25), $white);
+					}
+
+					.pokemon-type-psychic {
+						@include type-color(rgb(255, 80, 115), $white);
+					}
+
+					.pokemon-type-flying {
+						@include type-color(rgb(205, 167, 255), $white);
+					}
+
+					.pokemon-type-ground {
+						@include type-color(rgb(255, 211, 123), $black);
+					}
+
+					.pokemon-type-poison {
+						@include type-color(rgb(111, 1, 115), $white);
+					}
+
+					.pokemon-type-fighting {
+						@include type-color(rgb(148, 21, 21), $white);
+					}
+
+					.pokemon-type-ice {
+						@include type-color(rgb(193, 247, 255), $black);
+					}
+
+					.pokemon-type-electric {
+						@include type-color(rgb(255, 215, 94), $black);
+					}
+
+					.pokemon-type-fire {
+						@include type-color(rgb(255, 140, 0), $white);
+					}
+
+					.pokemon-type-normal {
+						@include type-color(rgb(125, 117, 94), $white);
+					}
 				}
 			}
 		}
