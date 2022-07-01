@@ -3,6 +3,11 @@ import { AbilityComponent } from "./AbilityComponent";
 
 const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 <img class="pokemon-img" src="%sprite">
+<div id="pokemon-basics">
+<div>Height: %height</div>
+<div>Weight: %weight</div>
+<div>Type: %type</div
+</div>
 <div class="pokemon-cont">
   <img class="pokeball-img" src="./pokeball-open.png"/></a>
   <div class="pokemon-name">%name</div>
@@ -34,7 +39,9 @@ export class PokemonCopmonent {
 		cardLayout = cardLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		cardLayout = cardLayout.replace(/%height/g, this.data.height.toString());
 		cardLayout = cardLayout.replace(/%weight/g, this.data.weight.toString());
+
 		cardLayout = cardLayout.replace(/%type/g, this.data.types[0].type.name); // TODO: ??
+
 
 		this.parent.innerHTML = cardLayout;
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
