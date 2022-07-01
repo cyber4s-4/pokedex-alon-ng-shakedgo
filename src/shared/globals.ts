@@ -9,29 +9,41 @@ export interface AbilityData {
 	slot: number;
 }
 
+export interface MoveData {
+	move: {
+		name: "transform";
+		url: "https://pokeapi.co/api/v2/move/144/";
+	};
+	version_group_details: any[];
+}
+
 export interface PokemonData {
 	abilities: AbilityData[];
 	base_experience: number;
-	forms: [];
-	game_indices: [];
+	forms: any[];
+	game_indices: any[];
 	height: number;
-	held_items: [];
+	held_items: any[];
 	id: number;
 	is_default: boolean;
 	location_area_encounters: string;
-	moves: [];
+	moves: any[];
 	name: string;
 	order: number;
 	past_types: any[];
 	species: {};
 	sprites: any;
-	stats: [];
-	types: [];
+	stats: any[];
+	types: any[];
 	weight: number;
+}
+
+export interface Bag {
+	[index: string]: PokemonData;
 }
 
 export function checkForBag() {
 	if (!localStorage.getItem("bag")) {
-		localStorage.setItem("bag", "");
+		localStorage.setItem("bag", "{}");
 	}
 }

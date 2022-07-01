@@ -8,6 +8,26 @@ body {
 	font-family: Tahoma;
 }
 
+#bag {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 70vw;
+	gap: 30px;
+
+	.pokemon-card {
+		width: 200px;
+		height: 300px;
+		border: 2px rgb(30, 30, 30) solid;
+		border-radius: 5px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 5px;
+	}
+}
+
 #pokemons {
 	font-size: 28px;
 	.pokemon-comp {

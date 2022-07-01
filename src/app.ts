@@ -1,3 +1,4 @@
+import { BagComponent } from "./components/BagComponent";
 import { SearchResult } from "./components/SearchResultComponent";
 import { checkForBag } from "./shared/globals";
 
@@ -8,6 +9,11 @@ class Module {
 
 	constructor() {
 		this.pokemonNames = this.getPokemonNames();
+	}
+
+	onLoad() {
+		const bag = new BagComponent(document.getElementsByTagName("body")[0]);
+		bag.render();
 	}
 
 	async getPokemonNames(): Promise<string[]> {
@@ -41,4 +47,6 @@ class Module {
 }
 export const module = new Module();
 
-window.addEventListener("load", () => {});
+window.addEventListener("load", () => {
+	module.onLoad();
+});
