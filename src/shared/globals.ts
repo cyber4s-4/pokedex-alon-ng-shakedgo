@@ -33,7 +33,7 @@ export interface PokemonData {
 	past_types: any[];
 	species: {};
 	sprites: any;
-	stats: any[];
+	stats: StatData[];
 	types: any[];
 	weight: number;
 }
@@ -41,6 +41,15 @@ export interface PokemonData {
 export interface TypeData {
 	name: string;
 	url: string;
+}
+
+export interface StatData {
+	base_stat: number;
+	effort: number;
+	stat: {
+		name: string;
+		url: string;
+	};
 }
 
 export interface Bag {

@@ -1,5 +1,6 @@
 import { PokemonData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
+import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
 
 const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
@@ -12,6 +13,11 @@ const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 </div>
 
 <div id="pokemon-basics" class="pokemon-basics">
+	<div id="pokemon-stats" class="pokemon-stats">
+		<h2>Stats</h2>
+		<div class="stats-container" id="stats-container"></div>
+	</div>
+
 	<div class="field-container" id="height">
 		<span class="field-label">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
 	</div>
@@ -38,6 +44,7 @@ const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
 	<h3 class="pokemon-name">%name</h3>
 	<img class="pokemon-img" src="%sprite">
 	<div id="pokemon-basics">
+		
 		<div class="field-container" id="height">
 		<span class="field-label">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
 		</div>
@@ -78,6 +85,10 @@ export class PokemonCopmonent {
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
 		img.addEventListener("click", () => this.catch());
 		img.src = !this.isCaugth ? "./pokeball-open.png" : "./pokeball-closed.png";
+
+		let statsContainer = document.getElementById("stats-container")!;
+		let stats = new StatsComponent(statsContainer, this.data.stats);
+		stats.render();
 
 		let abilitiesContainer = document.getElementById("pokemon-abilities")!;
 		for (const abilityData of this.data.abilities) {
