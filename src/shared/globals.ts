@@ -37,6 +37,7 @@ export interface PokemonData {
 
 export interface TypeData {
 	damage_relations: {
+		[index: string]: Pointer[];
 		double_damage_from: Pointer[];
 		double_damage_to: Pointer[];
 		half_damage_from: Pointer[];

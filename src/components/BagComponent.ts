@@ -21,5 +21,9 @@ export class BagComponent {
 			let pokemonCard = new PokemonCopmonent(document.getElementById("bag-contents")!, bag[pokemon]);
 			pokemonCard.renderAsCard();
 		}
+
+		if (Object.keys(bag).length === 0) {
+			document.getElementById("bag-contents")!.innerHTML = "Catch pokemons to have them in your bag!";
+		}
 	}
 }
