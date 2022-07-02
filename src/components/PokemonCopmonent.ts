@@ -28,17 +28,26 @@ const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
 	</div>
 
 	<div class="pokemon-catch">
+		<h4>Catch this pokemon to add it to your bag!</h4>
 		<img class="pokeball-img" src="./pokeball-closed.png" />
 	</div>
 </div>
 </div>`;
 
-const cardLayoutTemplate = `<div class="pokemon-card">
+const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
+	<h3 class="pokemon-name">%name</h3>
 	<img class="pokemon-img" src="%sprite">
 	<div id="pokemon-basics">
-		<div>Height: %height</div>
-		<div>Weight: %weight</div>
-		<div>Type: %type</div>
+		<div class="field-container" id="height">
+		<span class="field-label">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
+		</div>
+		<div class="field-container" id="weight">
+			<span class="field-label">Weight: </span><span class="field-value">%weight kg</span>
+		</div>
+		<div class="pokemon-types-container" id="pokemon-types-container">
+			<span class="field-label">Types:</span>
+			<span class="pokemon-types" id="pokemon-types"></span>
+		</div>
 	</div>
 </div>`;
 
@@ -88,8 +97,16 @@ export class PokemonCopmonent {
 		cardLayout = cardLayout.replace(/%name/g, this.data.name);
 		cardLayout = cardLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		cardLayout = cardLayout.replace(/%height/g, this.data.height.toString());
+		cardLayout = cardLayout.replace(/%cm/g, (this.data.height * 30.48).toString());
 		cardLayout = cardLayout.replace(/%weight/g, this.data.weight.toString());
 		this.parent.innerHTML += cardLayout;
+
+		let cardElement = document.getElementById(`pokemon-${this.data.name}`)!;
+		let typesContainer = cardElement.getElementsByClassName("pokemon-types")[0] as HTMLElement;
+		for (const typeData of this.data.types) {
+			let type = new TypeComponent(typesContainer, typeData.type);
+			type.render();
+		}
 	}
 
 	// Catch Pokemons - add to localStorage.
