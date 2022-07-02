@@ -1,11 +1,12 @@
-import { PokemonData } from "src/shared/globals";
 import { PokemonCopmonent } from "./PokemonCopmonent";
 
-const layoutTemplate = `<div id="bag"></div>`;
+const layoutTemplate = `<div id="bag" class="bag">
+	<h2>Pokemon Bag</h2>
+	<div id="bag-contents" class="bag-contents"></div>
+</div>`;
 
 export class BagComponent {
 	parent: HTMLElement;
-	pokemonData!: PokemonData;
 
 	constructor(parent: HTMLElement) {
 		this.parent = parent;
@@ -17,7 +18,7 @@ export class BagComponent {
 
 		// get data of each pokemon and add cardLayout to parent
 		for (const pokemon in bag) {
-			let pokemonCard = new PokemonCopmonent(document.getElementById("bag")!, bag[pokemon]);
+			let pokemonCard = new PokemonCopmonent(document.getElementById("bag-contents")!, bag[pokemon]);
 			pokemonCard.renderAsCard();
 		}
 	}

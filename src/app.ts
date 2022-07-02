@@ -1,4 +1,5 @@
 import { BagComponent } from "./components/BagComponent";
+import { NavbarComponent } from "./components/NavbarComponent";
 import { SearchResult } from "./components/SearchResultComponent";
 import { checkForBag } from "./shared/globals";
 
@@ -12,6 +13,9 @@ class Module {
 	}
 
 	onLoad() {
+		let navbar = new NavbarComponent(document.getElementsByTagName("body")[0]);
+		navbar.render();
+
 		const bag = new BagComponent(document.getElementsByTagName("body")[0]);
 		bag.render();
 	}

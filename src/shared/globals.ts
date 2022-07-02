@@ -1,19 +1,16 @@
-export const searchResultTemplate = `<li id='%name' onclick='location.href=location.origin + "/pokemon.html?pokemon=%name"'>%name</li>`;
+export interface Pointer {
+	name: string;
+	url: string;
+}
 
 export interface AbilityData {
-	ability: {
-		name: string;
-		url: string;
-	};
+	ability: Pointer;
 	is_hidden: boolean;
 	slot: number;
 }
 
 export interface MoveData {
-	move: {
-		name: "transform";
-		url: "https://pokeapi.co/api/v2/move/144/";
-	};
+	move: Pointer;
 	version_group_details: any[];
 }
 
@@ -39,22 +36,39 @@ export interface PokemonData {
 }
 
 export interface TypeData {
+	damage_relations: {
+		double_damage_from: Pointer[];
+		double_damage_to: Pointer[];
+		half_damage_from: Pointer[];
+		half_damage_to: Pointer[];
+		no_damage_from: Pointer[];
+		no_damage_to: Pointer[];
+	};
+	game_indices: any[];
+	generation: {};
+	id: number;
+	move_damage_class: {};
+	moves: Pointer[];
 	name: string;
-	url: string;
+	names: any[];
+	past_damage_relations: any[];
+	pokemon: Pointer[];
 }
 
 export interface StatData {
 	base_stat: number;
 	effort: number;
-	stat: {
-		name: string;
-		url: string;
-	};
+	stat: Pointer;
 }
 
 export interface Bag {
 	[index: string]: PokemonData;
 }
+
+export const pokeballImages = {
+	open: "./img/pokeball-open.png",
+	closed: "./img/pokeball-closed.png",
+};
 
 export function checkForBag() {
 	if (!localStorage.getItem("bag")) {

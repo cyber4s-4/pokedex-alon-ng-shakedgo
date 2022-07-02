@@ -1,27 +1,26 @@
+import { NavbarComponent } from "./components/NavbarComponent";
 import { PokemonCopmonent } from "./components/PokemonCopmonent";
 import { checkForBag, PokemonData } from "./shared/globals";
 
 checkForBag();
 
 export class Pokemon {
-	pokemonData!: PokemonData;
-
 	onLoad() {
+		let navbar = new NavbarComponent(document.getElementsByTagName("body")[0]);
+		navbar.render();
+
 		const searchParams = new URLSearchParams(location.search.slice(1));
 
 		if (searchParams.has("pokemon")) {
 			fetch("https://pokeapi.co/api/v2/pokemon/" + searchParams.get("pokemon"))
 				.then((res) => res.json())
-				.then((json) => (this.pokemonData = json as PokemonData))
-				.then((res) => {
-					this.renderPokemon(res, document.getElementById("pokemons")!);
-				});
+				.then((json) => this.renderPage(json));
 		}
 	}
 
 	// Renders PokemonCopmonent.
-	renderPokemon(data: PokemonData, parent: HTMLElement) {
-		let pokemon = new PokemonCopmonent(parent, data);
+	renderPage(data: PokemonData) {
+		let pokemon = new PokemonCopmonent(document.getElementById("pokemons")!, data);
 		pokemon.render();
 	}
 }

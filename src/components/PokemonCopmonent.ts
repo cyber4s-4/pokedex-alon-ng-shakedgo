@@ -1,18 +1,18 @@
-import { PokemonData } from "../shared/globals";
+import { pokeballImages, PokemonData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
 import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
 
-const layoutTemplate = `<div class="pokemon-comp" id="pokemon-%name">
-<div class="pokemon-header">
+const layoutTemplate = `<div class="comp" id="pokemon-%name">
+<div class="header">
 	<img
 		class="pokemon-img"
 		src="%sprite"
 	/>
-	<h2 class="pokemon-name">%name</h2>
+	<h2 class="name">%name</h2>
 </div>
 
-<div id="pokemon-basics" class="pokemon-basics">
+<div id="basics" class="pokemon-basics">
 	<div id="pokemon-stats" class="pokemon-stats">
 		<h2>Stats</h2>
 		<div class="stats-container" id="stats-container"></div>
@@ -84,7 +84,7 @@ export class PokemonCopmonent {
 		this.parent.innerHTML = pokemonLayout;
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
 		img.addEventListener("click", () => this.catch());
-		img.src = !this.isCaugth ? "./pokeball-open.png" : "./pokeball-closed.png";
+		img.src = !this.isCaugth ? pokeballImages.open : pokeballImages.closed;
 
 		let statsContainer = document.getElementById("stats-container")!;
 		let stats = new StatsComponent(statsContainer, this.data.stats);
@@ -124,7 +124,7 @@ export class PokemonCopmonent {
 	catch() {
 		this.isCaugth = !this.isCaugth;
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
-		img.src = !this.isCaugth ? "./pokeball-open.png" : "./pokeball-closed.png";
+		img.src = !this.isCaugth ? pokeballImages.open : pokeballImages.closed;
 
 		let bag = JSON.parse(localStorage.getItem("bag")!);
 		if (this.isCaugth) {

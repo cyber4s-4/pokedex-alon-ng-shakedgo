@@ -28,43 +28,73 @@ body {
 	margin: 0;
 }
 
-#bag {
-	margin: 20px auto;
-	display: flex;
-	justify-content: center;
-	flex-direction: row;
-	flex-wrap: wrap;
-	width: 70vw;
-	gap: 30px;
+nav {
+	background-color: $black;
 
-	.pokemon-card {
-		width: 200px;
-		height: 350px;
-		border: 2px $black solid;
-		border-radius: 5px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding: 5px;
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		margin: 0px 100px;
 
-		.pokemon-name {
-			text-transform: capitalize;
-			margin: 0 auto;
+		li {
+			padding: 10px;
+			color: $white;
+			display: inline-block;
+			transition: all 0.2s;
+			font-weight: bold;
+		}
+
+		li:hover {
+			background-color: $white;
+			color: $black;
 		}
 	}
 }
 
-#pokemons {
+.bag {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.bag-contents {
+		margin: 20px auto;
+		display: flex;
+		justify-content: center;
+		flex-direction: row;
+		flex-wrap: wrap;
+		width: 70vw;
+		gap: 30px;
+
+		.pokemon-card {
+			width: 200px;
+			height: 350px;
+			border: 2px $black solid;
+			border-radius: 5px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 5px;
+
+			.pokemon-name {
+				text-transform: capitalize;
+				margin: 0 auto;
+			}
+		}
+	}
+}
+
+main {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	font-size: 16px;
 	color: $black;
 
-	.pokemon-comp {
+	.comp {
 		@include flexbox(left, column);
 
-		.pokemon-header {
+		.header {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
@@ -74,6 +104,10 @@ body {
 			box-shadow: 0px 5px 15px 15px rgba(30, 30, 30, 0.1);
 			color: $white;
 			margin-bottom: 30px;
+
+			.type-name {
+				padding: 50px;
+			}
 
 			h2 {
 				font-size: 40px;

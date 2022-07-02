@@ -3,6 +3,7 @@ module.exports = {
 	entry: {
 		app: "./dist/tsc/app.js",
 		pokemon: "./dist/tsc/pokemon.js",
+		pokemonTypes: "./dist/tsc/pokemonTypes.js",
 	},
 	devtool: "source-map",
 	output: {
