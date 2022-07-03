@@ -53,7 +53,7 @@ export interface TypeData {
 	name: string;
 	names: any[];
 	past_damage_relations: any[];
-	pokemon: Pointer[];
+	pokemon: { pokemon: Pointer }[];
 }
 
 export interface StatData {

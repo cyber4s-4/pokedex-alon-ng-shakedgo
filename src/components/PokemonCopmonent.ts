@@ -1,4 +1,4 @@
-import { pokeballImages, PokemonData } from "../shared/globals";
+import { Pointer, pokeballImages, PokemonData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
 import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
@@ -19,13 +19,13 @@ const layoutTemplate = `<div class="comp" id="pokemon-%name">
 	</div>
 
 	<div class="field-container" id="height">
-		<span class="field-label">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
+		<span class="field-label capitalize">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
 	</div>
 	<div class="field-container" id="weight">
-		<span class="field-label">Weight: </span><span class="field-value">%weight kg</span>
+		<span class="field-label capitalize">Weight: </span><span class="field-value">%weight kg</span>
 	</div>
 	<div class="pokemon-types-container" id="pokemon-types-container">
-		<span class="field-label">Types:</span>
+		<span class="field-label capitalize">Types:</span>
 		<span class="pokemon-types" id="pokemon-types"></span>
 	</div>
 
@@ -41,18 +41,18 @@ const layoutTemplate = `<div class="comp" id="pokemon-%name">
 </div>`;
 
 const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
-	<h3 class="pokemon-name">%name</h3>
+	<h3 class="pokemon-name capitalize">%name</h3>
 	<img class="pokemon-img" src="%sprite">
 	<div id="pokemon-basics">
 		
 		<div class="field-container" id="height">
-		<span class="field-label">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
+		<span class="field-label capitalize">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
 		</div>
 		<div class="field-container" id="weight">
-			<span class="field-label">Weight: </span><span class="field-value">%weight kg</span>
+			<span class="field-label capitalize">Weight: </span><span class="field-value">%weight kg</span>
 		</div>
 		<div class="pokemon-types-container" id="pokemon-types-container">
-			<span class="field-label">Types:</span>
+			<span class="field-label capitalize">Types:</span>
 			<span class="pokemon-types" id="pokemon-types"></span>
 		</div>
 	</div>
@@ -133,5 +133,15 @@ export class PokemonCopmonent {
 			delete bag[this.data.name];
 		}
 		localStorage.setItem("bag", JSON.stringify(bag));
+	}
+
+	static createPokemonListing(data: Pointer): HTMLElement {
+		let pokemonListing = document.createElement("li");
+		let pokemonLink = document.createElement("a");
+		pokemonLink.href = `/pokemon.html?pokemon=${data.name}`;
+		pokemonLink.innerHTML = data.name;
+		pokemonLink.className = "capitalize";
+		pokemonListing.appendChild(pokemonLink);
+		return pokemonListing;
 	}
 }
