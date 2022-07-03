@@ -1,15 +1,18 @@
 import { Pointer, TypeData } from "../shared/globals";
+import { MoveComponent } from "./MoveComponent";
 import { PokemonCopmonent } from "./PokemonCopmonent";
 
 const layoutTemplate = `<a href="/type.html?type=%id" class="pokemon-type pokemon-type-%typeLowerCase">%type</a>`;
 const pageLayoutTemplate = `<div class="comp" id="type-%name">
-<div class="header">
-	<h2 class="name type-name capitalize">%name</h2>
-</div>
+	<div class="header">
+		<h2 class="name type-name capitalize">%name</h2>
+	</div>
 
-<table id="damage-relations" class="damage-relations"></table>
-<h2>Pokemons of this type</h2>
-<ul class="pokemon-list" id="pokemons-of-type"></ul>
+	<table id="damage-relations" class="damage-relations"></table>
+	<h2 style="margin: 40px 0 0 0">Pokemons of this type</h2>
+	<ul class="pokemon-list" id="pokemons-of-type"></ul>
+	<h2 style="margin: 70px 0 0 0">Moves of this type</h2>
+	<ul class="pokemon-list" id="moves-of-type"></ul>
 </div>`;
 const damageRelationRowTemplate = `<tr id="%attributes" class="%attributes">
 <td class="damage-relations-label capitalize">%label</td>
@@ -45,10 +48,16 @@ export class TypeComponent {
 		this.renderDamageRelationTypes("no_damage_from", this.data);
 		this.renderDamageRelationTypes("no_damage_to", this.data);
 
-		const pokemonList = document.getElementById("pokemons-of-type")!;
+		const pokemonsList = document.getElementById("pokemons-of-type")!;
 		for (const pokemon of this.data.pokemon) {
 			let pokemonListing = PokemonCopmonent.createPokemonListing(pokemon.pokemon);
-			pokemonList.appendChild(pokemonListing);
+			pokemonsList.appendChild(pokemonListing);
+		}
+
+		const movesList = document.getElementById("moves-of-type")!;
+		for (const move of this.data.moves) {
+			let moveListing = MoveComponent.createMoveListing(move);
+			movesList.appendChild(moveListing);
 		}
 	}
 
