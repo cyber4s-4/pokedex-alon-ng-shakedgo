@@ -10,8 +10,30 @@ export interface AbilityData {
 }
 
 export interface MoveData {
-	move: Pointer;
-	version_group_details: any[];
+	accuracy: number;
+	contest_combos: any;
+	contest_effect: { url: string };
+	contest_type: Pointer;
+	damage_class: Pointer;
+	effect_chance: any;
+	effect_changes: any[];
+	effect_entries: { effect: string; language: Pointer; short_effect: string };
+	flavor_text_entries: {}[];
+	generation: Pointer;
+	id: number;
+	learned_by_pokemon: Pointer[];
+	machines: any[];
+	meta: {};
+	name: string;
+	names: {}[];
+	past_values: any[];
+	power: number;
+	pp: number;
+	priority: number;
+	stat_changes: any[];
+	super_contest_effect: {};
+	target: Pointer;
+	type: Pointer;
 }
 
 export interface PokemonData {
@@ -30,7 +52,7 @@ export interface PokemonData {
 	past_types: any[];
 	species: {};
 	sprites: any;
-	stats: StatData[];
+	stats: { base_stat: number; effort: number; stat: Pointer }[];
 	types: any[];
 	weight: number;
 }
@@ -57,9 +79,8 @@ export interface TypeData {
 }
 
 export interface StatData {
-	base_stat: number;
-	effort: number;
-	stat: Pointer;
+	name: string;
+	value: number;
 }
 
 export interface Bag {

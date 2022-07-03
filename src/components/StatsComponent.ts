@@ -1,7 +1,7 @@
 import { StatData } from "src/shared/globals";
 
 const layoutTemplate = `<div class="stats-%name">
-    <span class="field-label">%name: </span><span class="field-value">%value</span>
+    <span class="field-label capitalize">%name: </span><span class="field-value">%value</span>
 </div>`;
 
 export class StatsComponent {
@@ -16,8 +16,8 @@ export class StatsComponent {
 	render() {
 		for (const stat of this.data) {
 			let statLayout = layoutTemplate;
-			statLayout = statLayout.replace(/%name/g, stat.stat.name);
-			statLayout = statLayout.replace(/%value/g, stat.base_stat.toString());
+			statLayout = statLayout.replace(/%name/g, stat.name);
+			statLayout = statLayout.replace(/%value/g, stat.value.toString());
 			this.parent.innerHTML += statLayout;
 		}
 	}

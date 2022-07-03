@@ -1,4 +1,4 @@
-import { Pointer, pokeballImages, PokemonData } from "../shared/globals";
+import { Pointer, pokeballImages, PokemonData, StatData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
 import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
@@ -12,8 +12,8 @@ const layoutTemplate = `<div class="comp" id="pokemon-%name">
 	<h2 class="name">%name</h2>
 </div>
 
-<div id="basics" class="pokemon-basics">
-	<div id="pokemon-stats" class="pokemon-stats">
+<div id="basics" class="basics">
+	<div id="stats" class="stats">
 		<h2>Stats</h2>
 		<div class="stats-container" id="stats-container"></div>
 	</div>
@@ -43,7 +43,7 @@ const layoutTemplate = `<div class="comp" id="pokemon-%name">
 const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
 	<h3 class="pokemon-name capitalize">%name</h3>
 	<img class="pokemon-img" src="%sprite">
-	<div id="pokemon-basics">
+	<div id="basics">
 		
 		<div class="field-container" id="height">
 		<span class="field-label capitalize">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
@@ -87,7 +87,11 @@ export class PokemonCopmonent {
 		img.src = !this.isCaugth ? pokeballImages.open : pokeballImages.closed;
 
 		let statsContainer = document.getElementById("stats-container")!;
-		let stats = new StatsComponent(statsContainer, this.data.stats);
+		let statsData: StatData[] = this.data.stats.map((stat) => ({
+			name: stat.stat.name,
+			value: stat.base_stat,
+		}));
+		let stats = new StatsComponent(statsContainer, statsData);
 		stats.render();
 
 		let abilitiesContainer = document.getElementById("pokemon-abilities")!;
