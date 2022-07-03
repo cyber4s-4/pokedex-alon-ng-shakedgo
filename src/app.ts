@@ -6,10 +6,10 @@ import { checkForBag } from "./shared/globals";
 checkForBag();
 
 class Module {
-	pokemonNames: Promise<string[]>;
+	searchValue: Promise<{ name: string; type: string; value: string }[]>;
 
 	constructor() {
-		this.pokemonNames = this.getPokemonNames();
+		this.searchValue = this.getSearchValues();
 	}
 
 	onLoad() {
@@ -20,28 +20,69 @@ class Module {
 		bag.render();
 	}
 
-	async getPokemonNames(): Promise<string[]> {
+	async getSearchValues(): Promise<{ name: string; type: string; value: string }[]> {
 		let allPokemons = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000000")
 			.then((res) => res.json())
-			.then((res) => res["results"]);
-		return allPokemons.map((pokemon: { name: string }) => pokemon.name);
+			.then((res) => res["results"])
+			.then((res) =>
+				res.map((pokemon: { name: string }) => ({
+					name: pokemon.name.replace(/-/g, " "),
+					value: pokemon.name,
+					type: "pokemon",
+				}))
+			);
+
+		let allTypes = await fetch("https://pokeapi.co/api/v2/type?limit=1000000")
+			.then((res) => res.json())
+			.then((res) => res["results"])
+			.then((res) =>
+				res.map((pokemon: { name: string; url: string }) => ({
+					name: pokemon.name.replace(/-/g, " "),
+					value: pokemon.url.split("/")[6],
+					type: "type",
+				}))
+			);
+
+		let allMoves = await fetch("https://pokeapi.co/api/v2/move?limit=1000000")
+			.then((res) => res.json())
+			.then((res) => res["results"])
+			.then((res) =>
+				res.map((pokemon: { name: string; url: string }) => ({
+					name: pokemon.name.replace(/-/g, " "),
+					value: pokemon.url.split("/")[6],
+					type: "move",
+				}))
+			);
+
+		return allPokemons
+			.concat(allTypes)
+			.concat(allMoves)
+			.map((pokemon: { name: string; type: string }) => pokemon);
 	}
 
 	updateSearchResults() {
 		let searchTerm = (document.getElementById("search") as HTMLInputElement).value.toLocaleLowerCase();
-		let validPokemons = this.pokemonNames.then((pokemons) =>
-			pokemons.filter((pokemon) => pokemon.startsWith(searchTerm))
+		let validPokemons = this.searchValue.then((pokemons) =>
+			pokemons.filter((pokemon) => pokemon.name.startsWith(searchTerm))
 		);
 
 		let ulString = "";
-
 		let searchResultsUL = document.getElementById("search-results")!;
 
 		validPokemons.then((pokemons) => {
 			if (searchTerm !== "") {
 				pokemons.forEach((pokemon) => {
-					let searchResult = new SearchResult(pokemon, searchResultsUL);
-					ulString += searchResult.layout;
+					let nameCapitalize = pokemon.name
+						.split(" ")
+						.map((word) => {
+							if (word[0]) {
+								return word[0].toUpperCase() + word.slice(1);
+							}
+						})
+						.join(" ");
+
+					let searchResult = new SearchResult(nameCapitalize, pokemon.type, pokemon.value, searchResultsUL);
+					ulString += searchResult.getLayout();
 				});
 			}
 
