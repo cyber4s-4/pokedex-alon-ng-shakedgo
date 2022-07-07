@@ -37,7 +37,7 @@ gulp.task("images", () => {
 gulp.task("browser-sync", () => {
 	browserSync.init({
 		browser: "default",
-		port: 4000,
+		port: 4050,
 		server: { baseDir: "./dist" },
 	});
 });
