@@ -33,7 +33,19 @@ app.get("/pokemoTypes.js", (req: Request, res: Response) => {
 
 app.get("/api/pokemon/:pokemon", (req: Request, res: Response) => {
 	let pokemon = req.params.pokemon;
-	const filePath: string = path.join(__dirname, `/api/pokemon/${pokemon}.json`);
+	const filePath: string = path.join(__dirname, `../pokemons/${pokemon}.json`);
+	res.send(JSON.stringify(fs.readFileSync(filePath, "utf8")));
+});
+
+app.get("/api/type/:type", (req: Request, res: Response) => {
+	let type = req.params.type;
+	const filePath: string = path.join(__dirname, `../types/${type}.json`);
+	res.send(JSON.stringify(fs.readFileSync(filePath, "utf8")));
+});
+
+app.get("/api/moves/:move", (req: Request, res: Response) => {
+	let move = req.params.move;
+	const filePath: string = path.join(__dirname, `../moves/${move}.json`);
 	res.send(JSON.stringify(fs.readFileSync(filePath, "utf8")));
 });
 
