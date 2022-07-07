@@ -11,7 +11,7 @@ class Module {
 
 		const searchParams = new URLSearchParams(location.search.slice(1));
 		if (searchParams.has("move")) {
-			fetch(`https://pokeapi.co/api/v2/move/${searchParams.get("move")}/`)
+			fetch(`https://localhost:4000/api/move/${searchParams.get("move")}/`)
 				.then((res) => res.json())
 				.then((json) => this.renderPage(json));
 		}

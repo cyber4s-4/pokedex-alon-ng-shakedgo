@@ -50,12 +50,14 @@ export class TypeComponent {
 
 		const pokemonsList = document.getElementById("pokemons-of-type")!;
 		for (const pokemon of this.data.pokemon) {
+			pokemon.pokemon.name = pokemon.pokemon.name.replace(/-/g, " ");
 			let pokemonListing = PokemonCopmonent.createPokemonListing(pokemon.pokemon);
 			pokemonsList.appendChild(pokemonListing);
 		}
 
 		const movesList = document.getElementById("moves-of-type")!;
 		for (const move of this.data.moves) {
+			move.name = move.name.replace(/-/g, " ");
 			let moveListing = MoveComponent.createMoveListing(move);
 			movesList.appendChild(moveListing);
 		}

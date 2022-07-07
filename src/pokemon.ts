@@ -12,7 +12,7 @@ export class Pokemon {
 		const searchParams = new URLSearchParams(location.search.slice(1));
 
 		if (searchParams.has("pokemon")) {
-			fetch("https://pokeapi.co/api/v2/pokemon/" + searchParams.get("pokemon"))
+			fetch("https://localhost:4000/api/pokemon/" + searchParams.get("pokemon"))
 				.then((res) => res.json())
 				.then((json) => this.renderPage(json));
 		}

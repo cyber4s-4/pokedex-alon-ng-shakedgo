@@ -11,7 +11,7 @@ class Module {
 
 		const searchParams = new URLSearchParams(location.search.slice(1));
 		if (searchParams.has("type")) {
-			fetch(`https://pokeapi.co/api/v2/type/${searchParams.get("type")}/`)
+			fetch(`https://localhost:4000/apitype/${searchParams.get("type")}/`)
 				.then((res) => res.json())
 				.then((json) => this.renderPage(json));
 		}

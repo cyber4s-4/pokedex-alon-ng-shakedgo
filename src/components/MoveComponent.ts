@@ -35,10 +35,10 @@ export class MoveComponent {
 		this.parent.innerHTML += pageLayout;
 
 		let statsData: StatData[] = [];
-		statsData.push({ name: "power", value: this.data.power });
-		statsData.push({ name: "accuracy", value: this.data.accuracy });
-		statsData.push({ name: "PP", value: this.data.pp });
-		statsData.push({ name: "priority", value: this.data.priority });
+		if (this.data.power) statsData.push({ name: "power", value: this.data.power });
+		if (this.data.accuracy) statsData.push({ name: "accuracy", value: this.data.accuracy });
+		if (this.data.pp) statsData.push({ name: "PP", value: this.data.pp });
+		if (this.data.priority) statsData.push({ name: "priority", value: this.data.priority });
 		let stats = new StatsComponent(document.getElementById("stats-container")!, statsData);
 		stats.render();
 
@@ -47,6 +47,7 @@ export class MoveComponent {
 
 		const pokemonsList = document.getElementById("pokemons-of-type")!;
 		for (const pokemon of this.data.learned_by_pokemon) {
+			pokemon.name = pokemon.name.replace(/-/g, " ");
 			let pokemonListing = PokemonCopmonent.createPokemonListing(pokemon);
 			pokemonsList.appendChild(pokemonListing);
 		}
