@@ -28,26 +28,37 @@ gulp.task("index", () => {
 	return gulp.src(["./src/*.html", "./src/favicon.ico"]).pipe(gulp.dest("./dist"));
 });
 
+gulp.task("express", () => {
+	gulp.src("./dist/tsc/express.js").pipe(gulp.dest("./dist"));
+
+	const tsc = exec("nodemon ./dist/express.js");
+
+	tsc.stdout.on("data", (data) => console.log(data));
+	tsc.stderr.on("data", (data) => console.error(data));
+
+	tsc.on("close", (code) => console.log(`tsc exited with code ${code}`));
+});
+
 // Transfers images
 gulp.task("images", () => {
 	return gulp.src(["./src/images/**.png"]).pipe(gulp.dest("./dist/img"));
 });
 
-// Browser Sync
-gulp.task("browser-sync", () => {
-	browserSync.init({
-		browser: "default",
-		port: 4050,
-		server: { baseDir: "./dist" },
-	});
-});
+// // Browser Sync
+// gulp.task("browser-sync", () => {
+// 	browserSync.init({
+// 		browser: "default",
+// 		port: 4050,
+// 		server: { baseDir: "./dist" },
+// 	});
+// });
 
-// Browser Sync live reload
-gulp.task("browser-sync-watch", () => {
-	gulp.watch("./dist/styles.css").on("change", browserSync.reload);
-	gulp.watch("./dist/*.js").on("change", browserSync.reload);
-	gulp.watch(["./dist/*.html"]).on("change", browserSync.reload);
-});
+// // Browser Sync live reload
+// gulp.task("browser-sync-watch", () => {
+// 	gulp.watch("./dist/styles.css").on("change", browserSync.reload);
+// 	gulp.watch("./dist/*.js").on("change", browserSync.reload);
+// 	gulp.watch(["./dist/*.html"]).on("change", browserSync.reload);
+// });
 
 // Watch scss files
 gulp.task("watch-scss", () => {
@@ -86,6 +97,7 @@ gulp.task(
 		"images",
 		"tsc",
 		"build",
-		gulp.parallel("browser-sync", "browser-sync-watch", "watch-scss", "watch-html", "watch-tsc", "tsc-w")
+		"express",
+		gulp.parallel("watch-scss", "watch-html", "watch-tsc", "tsc-w")
 	)
 );

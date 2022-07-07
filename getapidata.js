@@ -1,7 +1,7 @@
 const fs = require("fs");
 const pokemonFolderPath = "pokemons";
 
-let allPokemons = fetch("https://pokeapi.co/api/v2/pokemon?limit=100")
+let allPokemons = fetch("https://pokeapi.co/api/v2/pokemon?offset=200&limit=10000")
 	.then((res) => res.json())
 	.then((res) => res["results"])
 	.then((res) => res.map((pokemon) => pokemon.url));
