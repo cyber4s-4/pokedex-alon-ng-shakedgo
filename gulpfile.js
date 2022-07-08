@@ -75,6 +75,11 @@ gulp.task("watch-tsc", () => {
 	return gulp.watch("./dist/tsc/**/*.js", gulp.series("build"));
 });
 
+// Watch tsc files
+gulp.task("watch-express", () => {
+	return gulp.watch("./dist/tsc/express.js", gulp.series("express"));
+});
+
 // Initial ts compile
 gulp.task("tsc", (cb) => {
 	exec("tsc", (err, msg) => {
@@ -98,6 +103,6 @@ gulp.task(
 		"tsc",
 		"build",
 		"express",
-		gulp.parallel("watch-scss", "watch-html", "watch-tsc", "tsc-w")
+		gulp.parallel("watch-scss", "watch-html", "watch-tsc", "tsc-w", "watch-express")
 	)
 );

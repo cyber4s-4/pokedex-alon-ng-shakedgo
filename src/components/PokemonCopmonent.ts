@@ -44,7 +44,9 @@ const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
 	<h3 class="pokemon-name capitalize">%name</h3>
 	<img class="pokemon-img" src="%sprite">
 	<div id="basics">
-		
+		<div id="stats" class="stats">
+			<div class="stats-container" id="stats-container"></div>
+		</div>
 		<div class="field-container" id="height">
 		<span class="field-label capitalize">Height: </span><span class="field-value">%height ft. (%cm cm)</span>
 		</div>
@@ -58,7 +60,7 @@ const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
 	</div>
 </div>`;
 
-export class PokemonCopmonent {
+export class PokemonComponent {
 	parent: HTMLElement;
 	data: PokemonData;
 	isCaugth: boolean;
@@ -73,7 +75,8 @@ export class PokemonCopmonent {
 
 	render() {
 		let pokemonLayout = layoutTemplate;
-		pokemonLayout = pokemonLayout.replace(/%name/g, this.data.name);
+
+		pokemonLayout = pokemonLayout.replace(/%name/g, this.data.name.replace(/-/g, " "));
 		pokemonLayout = pokemonLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		pokemonLayout = pokemonLayout.replace(/%height/g, this.data.height.toString());
 		pokemonLayout = pokemonLayout.replace(/%cm/g, (this.data.height * 30.48).toString());
@@ -109,12 +112,22 @@ export class PokemonCopmonent {
 
 	renderAsCard() {
 		let cardLayout = cardLayoutTemplate;
-		cardLayout = cardLayout.replace(/%name/g, this.data.name);
+		cardLayout = cardLayout.replace(/%name/g, this.data.name.replace(/-/g, " "));
 		cardLayout = cardLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		cardLayout = cardLayout.replace(/%height/g, this.data.height.toString());
 		cardLayout = cardLayout.replace(/%cm/g, (this.data.height * 30.48).toString());
 		cardLayout = cardLayout.replace(/%weight/g, this.data.weight.toString());
 		this.parent.innerHTML += cardLayout;
+
+		let pokemonCardDiv = document.getElementById(`pokemon-${this.data.name}`)!;
+		let statsContainer = pokemonCardDiv.getElementsByClassName("stats-container")[0] as HTMLElement;
+		let statsData: StatData[] = this.data.stats.map((stat) => ({
+			name: stat.stat.name,
+			value: stat.base_stat,
+		}));
+
+		let stats = new StatsComponent(statsContainer, statsData);
+		stats.render();
 
 		let cardElement = document.getElementById(`pokemon-${this.data.name}`)!;
 		let typesContainer = cardElement.getElementsByClassName("pokemon-types")[0] as HTMLElement;
@@ -142,8 +155,8 @@ export class PokemonCopmonent {
 	static createPokemonListing(data: Pointer): HTMLElement {
 		let pokemonListing = document.createElement("li");
 		let pokemonLink = document.createElement("a");
-		pokemonLink.href = `/pokemon.html?pokemon=${data.name}`;
-		pokemonLink.innerHTML = data.name;
+		pokemonLink.href = data.url;
+		pokemonLink.innerHTML = data.name.replace(/-/g, " ");
 		pokemonLink.className = "capitalize";
 		pokemonListing.appendChild(pokemonLink);
 		return pokemonListing;

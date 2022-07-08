@@ -1,8 +1,8 @@
 import { Pointer, TypeData } from "../shared/globals";
 import { MoveComponent } from "./MoveComponent";
-import { PokemonCopmonent } from "./PokemonCopmonent";
+import { PokemonComponent } from "./PokemonCopmonent";
 
-const layoutTemplate = `<a href="/type.html?type=%id" class="pokemon-type pokemon-type-%typeLowerCase">%type</a>`;
+const layoutTemplate = `<a href="/type/%name" class="pokemon-type pokemon-type-%typeLowerCase">%type</a>`;
 const pageLayoutTemplate = `<div class="comp" id="type-%name">
 	<div class="header">
 		<h2 class="name type-name capitalize">%name</h2>
@@ -30,15 +30,16 @@ export class TypeComponent {
 
 	render() {
 		this.data = this.data as Pointer;
+		this.data.name = this.data.name.replace(/-/g, " ");
 		let typeLayout = layoutTemplate.replace(/%typeLowerCase/g, this.data.name);
-		typeLayout = typeLayout.replace(/%id/g, this.data.url.split("/")[6]);
+		typeLayout = typeLayout.replace(/%name/g, this.data.name);
 		this.parent.innerHTML += typeLayout.replace(/%type/g, this.data.name[0].toUpperCase() + this.data.name.slice(1));
 	}
 
 	renderAsPage() {
 		let pageLayout = pageLayoutTemplate;
 		this.data = this.data as TypeData;
-		pageLayout = pageLayout.replace(/%name/g, this.data.name);
+		pageLayout = pageLayout.replace(/%name/g, this.data.name.replace(/-/g, " "));
 		this.parent.innerHTML += pageLayout;
 
 		this.renderDamageRelationTypes("double_damage_from", this.data);
@@ -50,14 +51,16 @@ export class TypeComponent {
 
 		const pokemonsList = document.getElementById("pokemons-of-type")!;
 		for (const pokemon of this.data.pokemon) {
-			pokemon.pokemon.name = pokemon.pokemon.name.replace(/-/g, " ");
-			let pokemonListing = PokemonCopmonent.createPokemonListing(pokemon.pokemon);
+			let pokemonListing = PokemonComponent.createPokemonListing({
+				name: pokemon.pokemon.name,
+				url: `http://localhost:4000/pokemon/${pokemon.pokemon.name}`,
+			});
 			pokemonsList.appendChild(pokemonListing);
 		}
 
 		const movesList = document.getElementById("moves-of-type")!;
 		for (const move of this.data.moves) {
-			move.name = move.name.replace(/-/g, " ");
+			move.url = `http://localhost:4000/move/${move.name}`;
 			let moveListing = MoveComponent.createMoveListing(move);
 			movesList.appendChild(moveListing);
 		}

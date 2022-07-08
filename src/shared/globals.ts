@@ -88,8 +88,8 @@ export interface Bag {
 }
 
 export const pokeballImages = {
-	open: "./img/pokeball-open.png",
-	closed: "./img/pokeball-closed.png",
+	open: "../img/pokeball-open.png",
+	closed: "../img/pokeball-closed.png",
 };
 
 export function checkForBag() {

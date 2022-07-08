@@ -1,4 +1,4 @@
-import { PokemonCopmonent } from "./PokemonCopmonent";
+import { PokemonComponent } from "./PokemonCopmonent";
 
 const layoutTemplate = `<div id="bag" class="bag">
 	<h2>Pokemon Bag</h2>
@@ -18,7 +18,7 @@ export class BagComponent {
 
 		// get data of each pokemon and add cardLayout to parent
 		for (const pokemon in bag) {
-			let pokemonCard = new PokemonCopmonent(document.getElementById("bag-contents")!, bag[pokemon]);
+			let pokemonCard = new PokemonComponent(document.getElementById("bag-contents")!, bag[pokemon]);
 			pokemonCard.renderAsCard();
 		}
 

@@ -5,16 +5,14 @@ import { checkForBag, MoveData } from "./shared/globals";
 checkForBag();
 
 class Module {
-	onLoad() {
+	async onLoad() {
 		let navbar = new NavbarComponent(document.getElementsByTagName("body")[0]);
 		navbar.render();
 
-		const searchParams = new URLSearchParams(location.search.slice(1));
-		if (searchParams.has("move")) {
-			fetch(`https://localhost:4000/api/move/${searchParams.get("move")}/`)
-				.then((res) => res.json())
-				.then((json) => this.renderPage(json));
-		}
+		let pathnameSplit = location.pathname.split("/");
+		const pokemonMove = pathnameSplit[pathnameSplit.length - 1];
+		let res = await fetch("http://localhost:4000/api/move/" + pokemonMove);
+		this.renderPage(JSON.parse(await res.json()));
 	}
 
 	renderPage(data: MoveData) {

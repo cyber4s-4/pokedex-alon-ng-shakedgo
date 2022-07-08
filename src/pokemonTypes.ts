@@ -5,16 +5,14 @@ import { checkForBag, TypeData } from "./shared/globals";
 checkForBag();
 
 class Module {
-	onLoad() {
+	async onLoad() {
 		let navbar = new NavbarComponent(document.getElementsByTagName("body")[0]);
 		navbar.render();
 
-		const searchParams = new URLSearchParams(location.search.slice(1));
-		if (searchParams.has("type")) {
-			fetch(`https://localhost:4000/apitype/${searchParams.get("type")}/`)
-				.then((res) => res.json())
-				.then((json) => this.renderPage(json));
-		}
+		let pathnameSplit = location.pathname.split("/");
+		const pokemonType = pathnameSplit[pathnameSplit.length - 1];
+		let res = await fetch("http://localhost:4000/api/type/" + pokemonType);
+		this.renderPage(JSON.parse(await res.json()));
 	}
 
 	renderPage(data: TypeData) {

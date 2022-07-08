@@ -1,5 +1,5 @@
 import { MoveData, Pointer, StatData } from "src/shared/globals";
-import { PokemonCopmonent } from "./PokemonCopmonent";
+import { PokemonComponent } from "./PokemonCopmonent";
 import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
 
@@ -47,8 +47,8 @@ export class MoveComponent {
 
 		const pokemonsList = document.getElementById("pokemons-of-type")!;
 		for (const pokemon of this.data.learned_by_pokemon) {
-			pokemon.name = pokemon.name.replace(/-/g, " ");
-			let pokemonListing = PokemonCopmonent.createPokemonListing(pokemon);
+			pokemon.url = `http://localhost:4000/pokemon/${pokemon.name}`;
+			let pokemonListing = PokemonComponent.createPokemonListing(pokemon);
 			pokemonsList.appendChild(pokemonListing);
 		}
 	}
@@ -56,8 +56,8 @@ export class MoveComponent {
 	static createMoveListing(data: Pointer): HTMLElement {
 		let moveListing = document.createElement("li");
 		let moveLink = document.createElement("a");
-		moveLink.href = `/move.html?move=${data.url.split("/")[6]}`;
-		moveLink.innerHTML = data.name;
+		moveLink.href = data.url;
+		moveLink.innerHTML = data.name.replace(/-/g, " ");
 		moveLink.className = "capitalize";
 		moveListing.appendChild(moveLink);
 		return moveListing;
