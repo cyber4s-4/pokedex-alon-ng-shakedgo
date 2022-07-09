@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { json } from "body-parser";
+import { PokemonData } from "./shared/globals";
 const express = require("express");
 const fs = require("fs").promises;
 const path = require("path");
@@ -7,6 +8,26 @@ const path = require("path");
 const app = express();
 app.use(json());
 app.use(express.static(__dirname + "/"));
+
+let bagContent: { [index: string]: PokemonData } = {};
+
+app.post("/bag/remove/", (req: Request, res: Response) => {
+	let name = Object.keys(req.body)[0];
+	delete bagContent[name];
+	res.json(bagContent);
+});
+
+app.post("/bag/add", (req: Request, res: Response) => {
+	let name = Object.keys(req.body)[0];
+	if (!bagContent[name]) {
+		bagContent[name] = req.body[name];
+	}
+	res.json(bagContent);
+});
+
+app.get("/bag/get", (req: Request, res: Response) => {
+	res.json(bagContent);
+});
 
 app.get("/pokemon/:pokemon", (req: Request, res: Response) => {
 	res.sendFile(path.join(__dirname, "./pokemon.html"));

@@ -1,3 +1,4 @@
+import { application } from "express";
 import { Pointer, pokeballImages, PokemonData, StatData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
 import { StatsComponent } from "./StatsComponent";
@@ -41,7 +42,7 @@ const layoutTemplate = `<div class="comp" id="pokemon-%name">
 </div>`;
 
 const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
-	<h3 class="pokemon-name capitalize">%name</h3>
+	<h3 class="pokemon-name capitalize">%name-formatted</h3>
 	<img class="pokemon-img" src="%sprite">
 	<div id="basics">
 		<div id="stats" class="stats">
@@ -68,9 +69,12 @@ export class PokemonComponent {
 	constructor(parent: HTMLElement, data: PokemonData) {
 		this.parent = parent;
 		this.data = data;
-		const bag = JSON.parse(localStorage.getItem("bag")!);
-
-		this.isCaugth = bag[this.data.name];
+		this.isCaugth = false;
+		fetch("http://localhost:4000/bag/get")
+			.then((res) => res.json())
+			.then((res) => {
+				this.isCaugth = res[this.data.name];
+			});
 	}
 
 	render() {
@@ -112,7 +116,8 @@ export class PokemonComponent {
 
 	renderAsCard() {
 		let cardLayout = cardLayoutTemplate;
-		cardLayout = cardLayout.replace(/%name/g, this.data.name.replace(/-/g, " "));
+		cardLayout = cardLayout.replace(/%name-formatted/g, this.data.name.replace(/-/g, " "));
+		cardLayout = cardLayout.replace(/%name/g, this.data.name);
 		cardLayout = cardLayout.replace(/%sprite/g, this.data.sprites.front_default);
 		cardLayout = cardLayout.replace(/%height/g, this.data.height.toString());
 		cardLayout = cardLayout.replace(/%cm/g, (this.data.height * 30.48).toString());
@@ -142,14 +147,21 @@ export class PokemonComponent {
 		this.isCaugth = !this.isCaugth;
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
 		img.src = !this.isCaugth ? pokeballImages.open : pokeballImages.closed;
-
-		let bag = JSON.parse(localStorage.getItem("bag")!);
+		let body: { [_: string]: PokemonData } = {};
+		body[this.data.name] = this.data;
 		if (this.isCaugth) {
-			bag[this.data.name] = this.data;
+			fetch("http://localhost:4000/bag/add", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(body),
+			});
 		} else {
-			delete bag[this.data.name];
+			fetch("http://localhost:4000/bag/remove", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(body),
+			});
 		}
-		localStorage.setItem("bag", JSON.stringify(bag));
 	}
 
 	static createPokemonListing(data: Pointer): HTMLElement {
