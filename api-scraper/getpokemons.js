@@ -1,5 +1,5 @@
 const fs = require("fs");
-const pokemonFolderPath = "pokemons";
+const folderPath = "./api/pokemons";
 
 let allPokemons = fetch("https://pokeapi.co/api/v2/pokemon?offset=200&limit=10000")
 	.then((res) => res.json())
@@ -17,7 +17,7 @@ async function run(pokemons) {
 		for (let move of data.moves) {
 			delete move["version_group_details"];
 		}
-		fs.writeFileSync(pokemonFolderPath + "/" + name + ".json", JSON.stringify(data));
+		fs.writeFileSync(folderPath + "/" + name + ".json", JSON.stringify(data));
 		await timer(10000);
 		console.log(name);
 	}

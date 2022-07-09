@@ -8,10 +8,6 @@ const app = express();
 app.use(json());
 app.use(express.static(__dirname + "/"));
 
-app.get("/", (req: Request, res: Response) => {
-	res.sendFile(path.join(__dirname, "./index.html"));
-});
-
 app.get("/pokemon/:pokemon", (req: Request, res: Response) => {
 	res.sendFile(path.join(__dirname, "./pokemon.html"));
 });
@@ -26,7 +22,7 @@ app.get("/move/:move", (req: Request, res: Response) => {
 
 app.get("/api/pokemon", async (req: Request, res: Response) => {
 	let results: { results: { name: string; url: string }[] } = { results: [] };
-	let pokemonPath = path.join(__dirname, `../pokemons`);
+	let pokemonPath = path.join(__dirname, `../api/pokemons`);
 
 	let files = await fs.readdir(pokemonPath);
 	for (const file of files) {
@@ -40,13 +36,13 @@ app.get("/api/pokemon", async (req: Request, res: Response) => {
 
 app.get("/api/pokemon/:pokemon", (req: Request, res: Response) => {
 	let pokemon = req.params.pokemon;
-	const filePath: string = path.join(__dirname, `../pokemons/${pokemon}.json`);
+	const filePath: string = path.join(__dirname, `../api/pokemons/${pokemon}.json`);
 	fs.readFile(filePath, "utf8").then((data: {}) => res.json(data));
 });
 
 app.get("/api/type", async (req: Request, res: Response) => {
 	let results: { results: { name: string; url: string }[] } = { results: [] };
-	let typePath = path.join(__dirname, `../types`);
+	let typePath = path.join(__dirname, `../api/types`);
 
 	let files = await fs.readdir(typePath);
 	for (const file of files) {
@@ -60,13 +56,13 @@ app.get("/api/type", async (req: Request, res: Response) => {
 
 app.get("/api/type/:type", (req: Request, res: Response) => {
 	let type = req.params.type;
-	const filePath: string = path.join(__dirname, `../types/${type}.json`);
+	const filePath: string = path.join(__dirname, `../api/types/${type}.json`);
 	fs.readFile(filePath, "utf8").then((data: {}) => res.json(data));
 });
 
 app.get("/api/move", async (req: Request, res: Response) => {
 	let results: { results: { name: string; url: string }[] } = { results: [] };
-	let movePath = path.join(__dirname, `../moves`);
+	let movePath = path.join(__dirname, `../api/moves`);
 
 	let files = await fs.readdir(movePath);
 	for (const file of files) {
@@ -80,7 +76,7 @@ app.get("/api/move", async (req: Request, res: Response) => {
 
 app.get("/api/move/:move", (req: Request, res: Response) => {
 	let move = req.params.move;
-	const filePath: string = path.join(__dirname, `../moves/${move}.json`);
+	const filePath: string = path.join(__dirname, `../api/moves/${move}.json`);
 	fs.readFile(filePath, "utf8").then((data: {}) => res.json(data));
 });
 

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const pokemonFolderPath = "types";
+const folderPath = "./api/types";
 
 let allTypes = fetch("https://pokeapi.co/api/v2/type?limit=100")
 	.then((res) => res.json())
@@ -14,7 +14,7 @@ async function run(types) {
 	for (const type of types) {
 		let data = await fetch(type).then((res) => res.json());
 		let name = data.name.toString();
-		fs.writeFileSync(pokemonFolderPath + "/" + name + ".json", JSON.stringify(data));
+		fs.writeFileSync(folderPath + "/" + name + ".json", JSON.stringify(data));
 		await timer(10000);
 		console.log(name);
 	}
