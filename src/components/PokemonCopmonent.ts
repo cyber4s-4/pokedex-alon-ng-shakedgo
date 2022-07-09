@@ -64,20 +64,13 @@ const cardLayoutTemplate = `<div class="pokemon-card" id="pokemon-%name">
 export class PokemonComponent {
 	parent: HTMLElement;
 	data: PokemonData;
-	isCaugth: boolean;
 
 	constructor(parent: HTMLElement, data: PokemonData) {
 		this.parent = parent;
 		this.data = data;
-		this.isCaugth = false;
-		fetch("http://localhost:4000/bag/get")
-			.then((res) => res.json())
-			.then((res) => {
-				this.isCaugth = res[this.data.name];
-			});
 	}
 
-	render() {
+	async render() {
 		let pokemonLayout = layoutTemplate;
 
 		pokemonLayout = pokemonLayout.replace(/%name/g, this.data.name.replace(/-/g, " "));
@@ -91,7 +84,9 @@ export class PokemonComponent {
 		this.parent.innerHTML = pokemonLayout;
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
 		img.addEventListener("click", () => this.catch());
-		img.src = !this.isCaugth ? pokeballImages.open : pokeballImages.closed;
+		const isCaugth = await this.isCaught();
+
+		img.src = !isCaugth ? pokeballImages.open : pokeballImages.closed;
 
 		let statsContainer = document.getElementById("stats-container")!;
 		let statsData: StatData[] = this.data.stats.map((stat) => ({
@@ -143,13 +138,14 @@ export class PokemonComponent {
 	}
 
 	// Catch Pokemons - add to localStorage.
-	catch() {
-		this.isCaugth = !this.isCaugth;
+	async catch() {
+		const isCaugth = await this.isCaught();
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
-		img.src = !this.isCaugth ? pokeballImages.open : pokeballImages.closed;
+		img.src = isCaugth ? pokeballImages.open : pokeballImages.closed;
 		let body: { [_: string]: PokemonData } = {};
 		body[this.data.name] = this.data;
-		if (this.isCaugth) {
+
+		if (!isCaugth) {
 			fetch("http://localhost:4000/bag/add", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -162,6 +158,10 @@ export class PokemonComponent {
 				body: JSON.stringify(body),
 			});
 		}
+	}
+
+	async isCaught(): Promise<boolean> {
+		return (await fetch("http://localhost:4000/bag/get").then((res) => res.json()))[this.data.name] ? true : false;
 	}
 
 	static createPokemonListing(data: Pointer): HTMLElement {
