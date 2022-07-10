@@ -51,7 +51,10 @@ class Module {
 				}))
 			);
 
-		return allPokemons.concat(allTypes).concat(allMoves);
+		return allPokemons
+			.concat(allTypes)
+			.concat(allMoves)
+			.sort((a: { url: string }, b: { url: string }) => a.url.localeCompare(b.url));
 	}
 
 	updateSearchResults() {
