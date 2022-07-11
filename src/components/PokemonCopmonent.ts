@@ -1,4 +1,3 @@
-import { application } from "express";
 import { Pointer, pokeballImages, PokemonData, StatData } from "../shared/globals";
 import { AbilityComponent } from "./AbilityComponent";
 import { StatsComponent } from "./StatsComponent";
