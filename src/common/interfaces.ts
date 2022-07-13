@@ -86,14 +86,3 @@ export interface StatData {
 export interface Bag {
 	[index: string]: PokemonData;
 }
-
-export const pokeballImages = {
-	open: "../img/pokeball-open.png",
-	closed: "../img/pokeball-closed.png",
-};
-
-export function checkForBag() {
-	if (!localStorage.getItem("bag")) {
-		localStorage.setItem("bag", "{}");
-	}
-}

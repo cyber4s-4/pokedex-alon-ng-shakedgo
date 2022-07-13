@@ -1,4 +1,4 @@
-import { AbilityData } from "src/shared/globals";
+import { AbilityData } from "../interfaces";
 
 const layoutTemplate = `<div class="ability-container">
 <div class="ability-%name">

@@ -1,4 +1,5 @@
-import { Pointer, pokeballImages, PokemonData, StatData } from "../shared/globals";
+import { pokeballImages } from "../globals";
+import { Pointer, PokemonData, StatData } from "../interfaces";
 import { AbilityComponent } from "./AbilityComponent";
 import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
@@ -145,13 +146,13 @@ export class PokemonComponent {
 		body[this.data.name] = this.data;
 
 		if (!isCaugth) {
-			fetch("http://localhost:4000/bag/add", {
+			fetch("/bag/add", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(body),
 			});
 		} else {
-			fetch("http://localhost:4000/bag/remove", {
+			fetch("/bag/remove", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(body),
@@ -160,7 +161,7 @@ export class PokemonComponent {
 	}
 
 	async isCaught(): Promise<boolean> {
-		return (await fetch("http://localhost:4000/bag/get").then((res) => res.json()))[this.data.name] ? true : false;
+		return (await fetch("/bag/get").then((res) => res.json()))[this.data.name] ? true : false;
 	}
 
 	static createPokemonListing(data: Pointer): HTMLElement {

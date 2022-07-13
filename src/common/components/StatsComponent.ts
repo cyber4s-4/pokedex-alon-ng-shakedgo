@@ -1,4 +1,4 @@
-import { StatData } from "src/shared/globals";
+import { StatData } from "../interfaces";
 
 const layoutTemplate = `<div class="stats-%name">
     <span class="field-label capitalize">%name: </span><span class="field-value">%value</span>

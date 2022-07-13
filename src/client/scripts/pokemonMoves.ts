@@ -1,6 +1,7 @@
-import { MoveComponent } from "./components/MoveComponent";
-import { NavbarComponent } from "./components/NavbarComponent";
-import { checkForBag, MoveData } from "./shared/globals";
+import { MoveComponent } from "../../common/components/MoveComponent";
+import { NavbarComponent } from "../../common/components/NavbarComponent";
+import { MoveData } from "../../common/interfaces";
+import { checkForBag } from "../../common/globals";
 
 checkForBag();
 
@@ -11,7 +12,7 @@ class Module {
 
 		let pathnameSplit = location.pathname.split("/");
 		const pokemonMove = pathnameSplit[pathnameSplit.length - 1];
-		let res = await fetch("http://localhost:4000/api/move/" + pokemonMove);
+		let res = await fetch("/api/move/" + pokemonMove);
 		this.renderPage(JSON.parse(await res.json()));
 	}
 

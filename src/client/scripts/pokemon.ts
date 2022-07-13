@@ -1,6 +1,7 @@
-import { NavbarComponent } from "./components/NavbarComponent";
-import { PokemonComponent } from "./components/PokemonCopmonent";
-import { checkForBag, PokemonData } from "./shared/globals";
+import { NavbarComponent } from "../../common/components/NavbarComponent";
+import { PokemonComponent } from "../../common/components/PokemonCopmonent";
+import { PokemonData } from "../../common/interfaces";
+import { checkForBag } from "../../common/globals";
 
 checkForBag();
 
@@ -11,7 +12,7 @@ export class Pokemon {
 
 		let pathnameSplit = location.pathname.split("/");
 		const pokemonName = pathnameSplit[pathnameSplit.length - 1];
-		let res = await fetch("http://localhost:4000/api/pokemon/" + pokemonName);
+		let res = await fetch("/api/pokemon/" + pokemonName);
 		this.renderPage(JSON.parse(await res.json()));
 	}
 

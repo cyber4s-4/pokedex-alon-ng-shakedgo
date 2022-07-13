@@ -1,4 +1,4 @@
-import { Pointer, TypeData } from "../shared/globals";
+import { Pointer, TypeData } from "../interfaces";
 import { MoveComponent } from "./MoveComponent";
 import { PokemonComponent } from "./PokemonCopmonent";
 
@@ -53,14 +53,14 @@ export class TypeComponent {
 		for (const pokemon of this.data.pokemon) {
 			let pokemonListing = PokemonComponent.createPokemonListing({
 				name: pokemon.pokemon.name,
-				url: `http://localhost:4000/pokemon/${pokemon.pokemon.name}`,
+				url: `/pokemon/${pokemon.pokemon.name}`,
 			});
 			pokemonsList.appendChild(pokemonListing);
 		}
 
 		const movesList = document.getElementById("moves-of-type")!;
 		for (const move of this.data.moves) {
-			move.url = `http://localhost:4000/move/${move.name}`;
+			move.url = `/move/${move.name}`;
 			let moveListing = MoveComponent.createMoveListing(move);
 			movesList.appendChild(moveListing);
 		}

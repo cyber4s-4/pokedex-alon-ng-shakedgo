@@ -1,7 +1,7 @@
-import { BagComponent } from "./components/BagComponent";
-import { NavbarComponent } from "./components/NavbarComponent";
-import { SearchResult } from "./components/SearchResultComponent";
-import { checkForBag } from "./shared/globals";
+import { BagComponent } from "../../common/components/BagComponent";
+import { NavbarComponent } from "../../common/components/NavbarComponent";
+import { SearchResult } from "../../common/components/SearchResultComponent";
+import { checkForBag } from "../../common/globals";
 
 checkForBag();
 
@@ -21,33 +21,33 @@ class Module {
 	}
 
 	async getSearchValues(): Promise<{ name: string; url: string }[]> {
-		let allPokemons = await fetch("http://localhost:4000/api/pokemon")
+		let allPokemons = await fetch("/api/pokemon")
 			.then((res) => res.json())
 			.then((res) => res["results"])
 			.then((res) =>
 				res.map((pokemon: { name: string; url: string }) => ({
 					name: pokemon.name.replace(/-/g, " "),
-					url: `http://localhost:4000/pokemon/${pokemon.name}`,
+					url: `/pokemon/${pokemon.name}`,
 				}))
 			);
 
-		let allTypes = await fetch("http://localhost:4000/api/type")
+		let allTypes = await fetch("/api/type")
 			.then((res) => res.json())
 			.then((res) => res["results"])
 			.then((res) =>
 				res.map((type: { name: string; url: string }) => ({
 					name: type.name.replace(/-/g, " "),
-					url: `http://localhost:4000/type/${type.name}`,
+					url: `/type/${type.name}`,
 				}))
 			);
 
-		let allMoves = await fetch("http://localhost:4000/api/move")
+		let allMoves = await fetch("/api/move")
 			.then((res) => res.json())
 			.then((res) => res["results"])
 			.then((res) =>
 				res.map((move: { name: string; url: string }) => ({
 					name: move.name.replace(/-/g, " "),
-					url: `http://localhost:4000/move/${move.name}`,
+					url: `/move/${move.name}`,
 				}))
 			);
 

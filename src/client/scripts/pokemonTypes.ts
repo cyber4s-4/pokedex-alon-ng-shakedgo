@@ -1,6 +1,7 @@
-import { NavbarComponent } from "./components/NavbarComponent";
-import { TypeComponent } from "./components/TypeCompnent";
-import { checkForBag, TypeData } from "./shared/globals";
+import { NavbarComponent } from "../../common/components/NavbarComponent";
+import { TypeComponent } from "../../common/components/TypeCompnent";
+import { TypeData } from "../../common/interfaces";
+import { checkForBag } from "../../common/globals";
 
 checkForBag();
 
@@ -11,7 +12,7 @@ class Module {
 
 		let pathnameSplit = location.pathname.split("/");
 		const pokemonType = pathnameSplit[pathnameSplit.length - 1];
-		let res = await fetch("http://localhost:4000/api/type/" + pokemonType);
+		let res = await fetch("/api/type/" + pokemonType);
 		this.renderPage(JSON.parse(await res.json()));
 	}
 

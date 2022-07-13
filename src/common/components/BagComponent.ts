@@ -13,7 +13,7 @@ export class BagComponent {
 	}
 
 	async render() {
-		let bag = await fetch("http://localhost:4000/bag/get").then((res) => res.json());
+		let bag = await fetch("/bag/get").then((res) => res.json());
 		this.parent.innerHTML += layoutTemplate;
 
 		// get data of each pokemon and add cardLayout to parent

@@ -1,4 +1,4 @@
-import { MoveData, Pointer, StatData } from "src/shared/globals";
+import { MoveData, Pointer, StatData } from "../interfaces";
 import { PokemonComponent } from "./PokemonCopmonent";
 import { StatsComponent } from "./StatsComponent";
 import { TypeComponent } from "./TypeCompnent";
@@ -47,7 +47,7 @@ export class MoveComponent {
 
 		const pokemonsList = document.getElementById("pokemons-of-type")!;
 		for (const pokemon of this.data.learned_by_pokemon) {
-			pokemon.url = `http://localhost:4000/pokemon/${pokemon.name}`;
+			pokemon.url = `/pokemon/${pokemon.name}`;
 			let pokemonListing = PokemonComponent.createPokemonListing(pokemon);
 			pokemonsList.appendChild(pokemonListing);
 		}
