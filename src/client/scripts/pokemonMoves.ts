@@ -13,7 +13,7 @@ class Module {
 		let pathnameSplit = location.pathname.split("/");
 		const pokemonMove = pathnameSplit[pathnameSplit.length - 1];
 		let res = await fetch("/api/move/" + pokemonMove);
-		this.renderPage(JSON.parse(await res.json()));
+		this.renderPage(await res.json());
 	}
 
 	renderPage(data: MoveData) {

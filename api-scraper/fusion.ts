@@ -463,20 +463,24 @@ async function main() {
 				let id2 = pokemonData[pokemon2.id].fusionId;
 
 				const fusedPokemon: PokemonData = {
-					abilities: getRandomCollection(pokemon1, pokemon2, "abilities"),
+					abilities: getRandomCollection(pokemon1, pokemon2, "abilities").filter(
+						(value, index, self) => index === self.findIndex((a) => a.ability.name === value.ability.name)
+					),
 					height: getRandomInRange(
 						Math.min(pokemon1.height, pokemon2.height),
 						Math.max(pokemon1.height, pokemon2.height)
 					),
 					id: idCounter++,
 					is_default: false,
-					moves: getRandomCollection(pokemon1, pokemon2, "moves"),
+					moves: Array.from(new Set(getRandomCollection(pokemon1, pokemon2, "moves"))),
 					name:
 						pokemon1.name.slice(0, pokemon1.name.length / 2) +
 						pokemon2.name.slice(pokemon2.name.length / 2, pokemon2.name.length),
 					sprites: { front_default: spriteURL.replace(/%id1/g, id1).replace(/%id2/g, id2) },
 					stats: getRandomStats(pokemon1, pokemon2),
-					types: getRandomCollection(pokemon1, pokemon2, "types"),
+					types: getRandomCollection(pokemon1, pokemon2, "types").filter(
+						(value, index, self) => index === self.findIndex((t) => t.type.name === value.type.name)
+					),
 					weight: getRandomInRange(
 						Math.min(pokemon1.weight, pokemon2.weight),
 						Math.max(pokemon1.weight, pokemon2.weight)
@@ -505,7 +509,7 @@ function getRandomCollection(pokemon1: PokemonData, pokemon2: PokemonData, colle
 		.concat(pokemon2[collectionName])
 		.filter(() => Math.random() < (collectionName === "moves" ? 0.25 : 0.5));
 	if (collection.length === 0) {
-		collection.push(pokemon1[collectionName]);
+		collection.push(pokemon1[collectionName][0]);
 	}
 	return collection;
 }

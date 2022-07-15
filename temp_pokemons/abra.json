@@ -119,30 +119,12 @@
 		"front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/63.png"
 	},
 	"stats": [
-		{
-			"base_stat": 25,
-			"name": "hp"
-		},
-		{
-			"base_stat": 20,
-			"name": "attack"
-		},
-		{
-			"base_stat": 15,
-			"name": "defense"
-		},
-		{
-			"base_stat": 105,
-			"name": "special-attack"
-		},
-		{
-			"base_stat": 55,
-			"name": "special-defense"
-		},
-		{
-			"base_stat": 90,
-			"name": "speed"
-		}
+		{ "base_stat": 25, "effort": 0, "stat": { "name": "hp", "url": "https://pokeapi.co/api/v2/stat/1/" } },
+		{ "base_stat": 20, "effort": 0, "stat": { "name": "attack", "url": "https://pokeapi.co/api/v2/stat/2/" } },
+		{ "base_stat": 15, "effort": 0, "stat": { "name": "defense", "url": "https://pokeapi.co/api/v2/stat/3/" } },
+		{ "base_stat": 105, "effort": 1, "stat": { "name": "special-attack", "url": "https://pokeapi.co/api/v2/stat/4/" } },
+		{ "base_stat": 55, "effort": 0, "stat": { "name": "special-defense", "url": "https://pokeapi.co/api/v2/stat/5/" } },
+		{ "base_stat": 90, "effort": 0, "stat": { "name": "speed", "url": "https://pokeapi.co/api/v2/stat/6/" } }
 	],
 	"types": [
 		{

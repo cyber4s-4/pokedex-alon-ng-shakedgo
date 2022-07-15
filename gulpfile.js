@@ -45,7 +45,7 @@ gulp.task("api", (cb) => {
 
 // Opens browser at localhost:4000
 gulp.task("open-browser", async () => {
-	return setTimeout(() => open("http://localhost:4000"), 500);
+	return setTimeout(() => open("http://localhost:4000"), 3000);
 });
 
 // Executes express.js via nodemon

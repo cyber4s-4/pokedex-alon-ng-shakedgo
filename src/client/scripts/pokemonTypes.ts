@@ -13,7 +13,7 @@ class Module {
 		let pathnameSplit = location.pathname.split("/");
 		const pokemonType = pathnameSplit[pathnameSplit.length - 1];
 		let res = await fetch("/api/type/" + pokemonType);
-		this.renderPage(JSON.parse(await res.json()));
+		this.renderPage(await res.json());
 	}
 
 	renderPage(data: TypeData) {

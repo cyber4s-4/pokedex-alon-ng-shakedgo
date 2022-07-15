@@ -6,12 +6,6 @@ import { checkForBag } from "../../common/globals";
 checkForBag();
 
 class Module {
-	searchValues: Promise<{ name: string; url: string }[]>;
-
-	constructor() {
-		this.searchValues = this.getSearchValues();
-	}
-
 	onLoad() {
 		let navbar = new NavbarComponent(document.getElementsByTagName("body")[0]);
 		navbar.render();
@@ -20,48 +14,20 @@ class Module {
 		bag.render();
 	}
 
-	async getSearchValues(): Promise<{ name: string; url: string }[]> {
-		let allPokemons = await fetch("/api/pokemon")
-			.then((res) => res.json())
-			.then((res) => res["results"])
-			.then((res) =>
-				res.map((pokemon: { name: string; url: string }) => ({
-					name: pokemon.name.replace(/-/g, " "),
-					url: `/pokemon/${pokemon.name}`,
-				}))
-			);
-
-		let allTypes = await fetch("/api/type")
-			.then((res) => res.json())
-			.then((res) => res["results"])
-			.then((res) =>
-				res.map((type: { name: string; url: string }) => ({
-					name: type.name.replace(/-/g, " "),
-					url: `/type/${type.name}`,
-				}))
-			);
-
-		let allMoves = await fetch("/api/move")
-			.then((res) => res.json())
-			.then((res) => res["results"])
-			.then((res) =>
-				res.map((move: { name: string; url: string }) => ({
-					name: move.name.replace(/-/g, " "),
-					url: `/move/${move.name}`,
-				}))
-			);
+	async getSearchValues(term: string): Promise<{ name: string; url: string }[]> {
+		let allPokemons = await fetch(`/api/pokemon?term=${term}`).then((res) => res.json());
+		let allTypes = await fetch(`/api/type?term=${term}`).then((res) => res.json());
+		let allMoves = await fetch(`/api/move?term=${term}`).then((res) => res.json());
 
 		return allPokemons
 			.concat(allTypes)
 			.concat(allMoves)
-			.sort((a: { url: string }, b: { url: string }) => a.url.localeCompare(b.url));
+			.sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name));
 	}
 
 	updateSearchResults() {
 		let searchTerm = (document.getElementById("search") as HTMLInputElement).value.toLocaleLowerCase();
-		let validSearches = this.searchValues.then((searchValues) =>
-			searchValues.filter((value) => value.name.startsWith(searchTerm))
-		);
+		let validSearches = this.getSearchValues(searchTerm);
 
 		let ulString = "";
 		let searchResultsUL = document.getElementById("search-results")!;
