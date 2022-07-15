@@ -9,18 +9,24 @@ let spriteURL = "https://raw.githubusercontent.com/Aegide/autogen-fusion-sprites
 async function main() {
 	const client = new MongoClient(url);
 	client.connect(async (err: any) => {
-		let types = client.db("pokedex").collection("types");
-		let files = await fs.readdir("../src/api/types");
+		let moves = client.db("pokedex").collection("moves");
+		let files = await fs.readdir("../src/api/moves");
 		for (const file of files) {
-			let type = await require("../src/api/types/" + file);
-			type = {
-				damage_relations: type["damage_relations"],
-				id: type["id"],
-				name: type["name"],
-				moves: type["moves"].map((move) => ({ name: move.name })),
-				pokemons: type["pokemon"],
+			let move = await require("../src/api/moves/" + file);
+			move = {
+				accuracy: move["accuracy"],
+				power: move["power"],
+				pp: move["pp"],
+				priority: move["priority"],
+				type: move["type"],
+				id: move["id"],
+				name: move["name"],
+				learned_by_pokemon: move["learned_by_pokemon"].map((pokemon) => ({
+					name: pokemon.name,
+				})),
 			};
-			types.insertOne(type);
+
+			moves.insertOne(move);
 		}
 	});
 }
