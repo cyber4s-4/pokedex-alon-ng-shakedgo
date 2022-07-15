@@ -31,7 +31,7 @@ gulp.task("tsc", (cb) => {
 });
 
 // Packs js files
-gulp.task("webpack", async (cb) => {
+gulp.task("webpack", (cb) => {
 	return gulp
 		.src("./dist/client/scripts/*.js")
 		.pipe(webpack(require("./webpack.config")))
@@ -95,7 +95,8 @@ gulp.task("start-deploy", () => {
 // Copy dist folder to deploy
 gulp.task("create-deploy", () => {
 	gulp.src(["package.json", "package-lock.json", ".gitignore", "Procfile"]).pipe(gulp.dest("./deploy"));
-	return gulp.src("./dist/**/*").pipe(gulp.dest("./deploy/src"));
+	gulp.src("./dist/**/*").pipe(gulp.dest("./deploy/src"));
+	return gulp.src("./dist/static/scripts/*").pipe(gulp.dest("./deploy/src/static/scripts"));
 });
 
 // Deleted unused deploy files
