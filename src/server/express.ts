@@ -106,8 +106,7 @@ app.get("/api/type", async (req: Request, res: Response) => {
 
 app.get("/api/type/:type", (req: Request, res: Response) => {
 	let type = req.params.type;
-	const filePath: string = path.join(__dirname, `../api/types/${type}.json`);
-	fs.readFile(filePath, "utf8").then((data: {}) => res.json(data));
+	typesCollection.findOne({ name: type }).then((data: WithId<TypeData> | null) => res.json(data));
 });
 
 // @ts-ignore
@@ -127,8 +126,7 @@ app.get("/api/move", async (req: Request, res: Response) => {
 
 app.get("/api/move/:move", (req: Request, res: Response) => {
 	let move = req.params.move;
-	const filePath: string = path.join(__dirname, `../api/moves/${move}.json`);
-	fs.readFile(filePath, "utf8").then((data: {}) => res.json(data));
+	movesCollection.findOne({ name: move }).then((data: WithId<MoveData> | null) => res.json(data));
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
