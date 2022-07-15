@@ -18,7 +18,7 @@ async function main() {
 				id: type["id"],
 				name: type["name"],
 				moves: type["moves"].map((move) => ({ name: move.name })),
-				pokemons: type["pokemon"],
+				pokemon: type["pokemon"],
 			};
 			types.insertOne(type);
 		}
