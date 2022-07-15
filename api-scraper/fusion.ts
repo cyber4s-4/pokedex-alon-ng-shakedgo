@@ -454,42 +454,15 @@ async function main() {
 	client.connect(async (err: any) => {
 		let pokemons = client.db("pokedex").collection("pokemons");
 		let pokemonsTemp: PokemonData[] = [];
-		let files = await fs.readdir("./temp_pokemons");
+		let files = await fs.readdir("../temp_pokemons");
 		for (const file1 of files) {
-			const pokemon1: PokemonData = await require("./temp_pokemons/" + file1);
+			const pokemon1: PokemonData = await require("../temp_pokemons/" + file1);
 			for (const file2 of files) {
-				const pokemon2: PokemonData = await require("./temp_pokemons/" + file2);
+				const pokemon2: PokemonData = await require("../temp_pokemons/" + file2);
 				let id1 = pokemonData[pokemon1.id].fusionId;
 				let id2 = pokemonData[pokemon2.id].fusionId;
 
-				const fusedPokemon: PokemonData = {
-					abilities: getRandomCollection(pokemon1, pokemon2, "abilities").filter(
-						(value, index, self) => index === self.findIndex((a) => a.ability.name === value.ability.name)
-					),
-					height: getRandomInRange(
-						Math.min(pokemon1.height, pokemon2.height),
-						Math.max(pokemon1.height, pokemon2.height)
-					),
-					id: idCounter++,
-					is_default: false,
-					moves: Array.from(new Set(getRandomCollection(pokemon1, pokemon2, "moves"))),
-					name:
-						pokemon1.name.slice(0, pokemon1.name.length / 2) +
-						pokemon2.name.slice(pokemon2.name.length / 2, pokemon2.name.length),
-					sprites: { front_default: spriteURL.replace(/%id1/g, id1).replace(/%id2/g, id2) },
-					stats: getRandomStats(pokemon1, pokemon2),
-					types: getRandomCollection(pokemon1, pokemon2, "types").filter(
-						(value, index, self) => index === self.findIndex((t) => t.type.name === value.type.name)
-					),
-					weight: getRandomInRange(
-						Math.min(pokemon1.weight, pokemon2.weight),
-						Math.max(pokemon1.weight, pokemon2.weight)
-					),
-					parents: [
-						{ name: pokemon1.name, url: `/pokemon/${pokemon1.name}` },
-						{ name: pokemon2.name, url: `/pokemon/${pokemon2.name}` },
-					],
-				};
+				const fusedPokemon: PokemonData = fuse(pokemon1, pokemon2);
 				pokemonsTemp.push(fusedPokemon);
 				if (idCounter % 100 === 0) {
 					await pokemons.insertMany(pokemonsTemp);
@@ -498,6 +471,34 @@ async function main() {
 			}
 		}
 	});
+}
+
+function fuse(pokemon1: PokemonData, pokemon2: PokemonData): PokemonData {
+	let id1 = pokemonData[pokemon1.id].fusionId;
+	let id2 = pokemonData[pokemon2.id].fusionId;
+
+	return {
+		abilities: getRandomCollection(pokemon1, pokemon2, "abilities").filter(
+			(value, index, self) => index === self.findIndex((a) => a.name === value.name)
+		),
+		height: getRandomInRange(Math.min(pokemon1.height, pokemon2.height), Math.max(pokemon1.height, pokemon2.height)),
+		id: idCounter++,
+		is_default: false,
+		moves: Array.from(new Set(getRandomCollection(pokemon1, pokemon2, "moves"))),
+		name:
+			pokemon1.name.slice(0, pokemon1.name.length / 2) +
+			pokemon2.name.slice(pokemon2.name.length / 2, pokemon2.name.length),
+		sprites: { front_default: spriteURL.replace(/%id1/g, id1).replace(/%id2/g, id2) },
+		stats: getRandomStats(pokemon1, pokemon2),
+		types: getRandomCollection(pokemon1, pokemon2, "types").filter(
+			(value, index, self) => index === self.findIndex((t) => t.type.name === value.type.name)
+		),
+		weight: getRandomInRange(Math.min(pokemon1.weight, pokemon2.weight), Math.max(pokemon1.weight, pokemon2.weight)),
+		parents: [
+			{ name: pokemon1.name, url: `/pokemon/${pokemon1.name}` },
+			{ name: pokemon2.name, url: `/pokemon/${pokemon2.name}` },
+		],
+	};
 }
 
 function getRandomInRange(min: number, max: number): number {
@@ -540,5 +541,3 @@ async function main2() {
 		}
 	});
 }
-
-main2();
