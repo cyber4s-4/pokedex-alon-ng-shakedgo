@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { json } from "body-parser";
 import express from "express";
-import { promises as fs } from "fs";
 import path from "path";
 import { MoveData, PokemonData, TypeData } from "../common/interfaces";
 import { Collection, MongoClient, WithId } from "mongodb";
@@ -68,39 +67,42 @@ app.get("/move/:move", (req: Request, res: Response) => {
 
 // @ts-ignore
 app.get("/api/pokemon", async (req: Request, res: Response) => {
-	let results: { results: { name: string; url: string }[] } = { results: [] };
-	let pokemonPath = path.join(__dirname, `../api/pokemons`);
+	const searchTerm = req.query["term"] as string;
 
-	let files = await fs.readdir(pokemonPath);
-	for (const file of files) {
-		const filePath = path.join(pokemonPath, file);
-		let data = await fs.readFile(filePath).then((res: any) => JSON.parse(res));
-
-		results.results.push({ name: data.name, url: `/api/pokemon/${data.name}` });
-	}
+	let pokemonSearch = await pokemonCollection
+		.aggregate([
+			{ $match: { name: { $regex: new RegExp("^" + searchTerm) } } },
+			{ $project: { name: 1, _id: 0 } },
+			{ $limit: 10 },
+		])
+		.toArray();
+	let results = await pokemonSearch.map((pokemon) => ({
+		name: pokemon.name,
+		url: `/pokemon/${pokemon.name}`,
+	}));
 	res.json(results);
 });
 
 app.get("/api/pokemon/:pokemon", async (req: Request, res: Response) => {
 	let pokemon = req.params.pokemon;
 	pokemonCollection.findOne({ name: pokemon }).then((data: WithId<PokemonData> | null) => res.json(data));
-
-	// const filePath: string = path.join(__dirname, `../api/pokemons/${pokemon}.json`);
-	// fs.readFile(filePath, "utf8").then();
 });
 
 // @ts-ignore
 app.get("/api/type", async (req: Request, res: Response) => {
-	let results: { results: { name: string; url: string }[] } = { results: [] };
-	let typePath = path.join(__dirname, `../api/types`);
+	const searchTerm = req.query["term"] as string;
 
-	let files = await fs.readdir(typePath);
-	for (const file of files) {
-		const filePath = path.join(typePath, file);
-		let data = await fs.readFile(filePath).then((res: any) => JSON.parse(res));
-
-		results.results.push({ name: data.name, url: `/api/move/${data.name}` });
-	}
+	let typeSearch = await typesCollection
+		.aggregate([
+			{ $match: { name: { $regex: new RegExp("^" + searchTerm) } } },
+			{ $project: { name: 1, _id: 0 } },
+			{ $limit: 10 },
+		])
+		.toArray();
+	let results = await typeSearch.map((type) => ({
+		name: type.name,
+		url: `/type/${type.name}`,
+	}));
 	res.json(results);
 });
 
@@ -111,16 +113,19 @@ app.get("/api/type/:type", (req: Request, res: Response) => {
 
 // @ts-ignore
 app.get("/api/move", async (req: Request, res: Response) => {
-	let results: { results: { name: string; url: string }[] } = { results: [] };
-	let movePath = path.join(__dirname, `../api/moves`);
+	const searchTerm = req.query["term"] as string;
 
-	let files = await fs.readdir(movePath);
-	for (const file of files) {
-		const filePath = path.join(movePath, file);
-		let data = await fs.readFile(filePath).then((res: any) => JSON.parse(res));
-
-		results.results.push({ name: data.name, url: `/api/move/${data.name}` });
-	}
+	let moveSearch = await movesCollection
+		.aggregate([
+			{ $match: { name: { $regex: new RegExp("^" + searchTerm) } } },
+			{ $project: { name: 1, _id: 0 } },
+			{ $limit: 10 },
+		])
+		.toArray();
+	let results = await moveSearch.map((move) => ({
+		name: move.name,
+		url: `/move/${move.name}`,
+	}));
 	res.json(results);
 });
 

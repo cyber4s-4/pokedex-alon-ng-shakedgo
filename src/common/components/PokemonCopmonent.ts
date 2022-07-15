@@ -87,6 +87,8 @@ export class PokemonComponent {
 		img.src = !isCaugth ? pokeballImages.open : pokeballImages.closed;
 
 		let statsContainer = document.getElementById("stats-container")!;
+		console.log(this.data.stats);
+
 		let statsData: StatData[] = this.data.stats.map((stat) => ({
 			name: stat.stat.name,
 			value: stat.base_stat,
