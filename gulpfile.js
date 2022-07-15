@@ -50,7 +50,7 @@ gulp.task("open-browser", async () => {
 
 // Executes express.js via nodemon
 gulp.task("express", () => {
-	const express = exec("npx nodemon ./dist/server/express.js");
+	const express = exec("node ./dist/server/express.js");
 
 	express.stdout.on("data", (data) => console.log(data));
 	express.stderr.on("data", (data) => console.error(data));

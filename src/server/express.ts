@@ -3,8 +3,28 @@ import { json } from "body-parser";
 import express from "express";
 import { promises as fs } from "fs";
 import path from "path";
-import { PokemonData } from "../common/interfaces";
+import { MoveData, PokemonData, TypeData } from "../common/interfaces";
+import { Collection, MongoClient, WithId } from "mongodb";
 const port = process.env.PORT || 4000;
+
+export async function connectDB() {
+	const uri = `mongodb+srv://cyber4s-pokemon:${encodeURIComponent(
+		"pokemon"
+	)}@cluster.oiwap.mongodb.net/?retryWrites=true&w=majority`;
+	const client = new MongoClient(uri);
+	await client.connect();
+	let db = client.db("pokedex");
+	return db;
+}
+
+let pokemonCollection: Collection<PokemonData>,
+	movesCollection: Collection<MoveData>,
+	typesCollection: Collection<TypeData>;
+connectDB().then((db) => {
+	pokemonCollection = db.collection("pokemons");
+	movesCollection = db.collection("moves");
+	typesCollection = db.collection("types");
+});
 
 const app = express();
 app.use(json());
@@ -61,10 +81,12 @@ app.get("/api/pokemon", async (req: Request, res: Response) => {
 	res.json(results);
 });
 
-app.get("/api/pokemon/:pokemon", (req: Request, res: Response) => {
+app.get("/api/pokemon/:pokemon", async (req: Request, res: Response) => {
 	let pokemon = req.params.pokemon;
-	const filePath: string = path.join(__dirname, `../api/pokemons/${pokemon}.json`);
-	fs.readFile(filePath, "utf8").then((data: {}) => res.json(data));
+	pokemonCollection.findOne({ name: pokemon }).then((data: WithId<PokemonData> | null) => res.json(data));
+
+	// const filePath: string = path.join(__dirname, `../api/pokemons/${pokemon}.json`);
+	// fs.readFile(filePath, "utf8").then();
 });
 
 // @ts-ignore

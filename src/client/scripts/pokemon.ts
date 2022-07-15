@@ -13,7 +13,7 @@ export class Pokemon {
 		let pathnameSplit = location.pathname.split("/");
 		const pokemonName = pathnameSplit[pathnameSplit.length - 1];
 		let res = await fetch("/api/pokemon/" + pokemonName);
-		this.renderPage(JSON.parse(await res.json()));
+		this.renderPage(await res.json());
 	}
 
 	// Renders PokemonCopmonent.

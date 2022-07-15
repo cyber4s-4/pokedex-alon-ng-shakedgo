@@ -79,8 +79,6 @@ export class PokemonComponent {
 		pokemonLayout = pokemonLayout.replace(/%cm/g, (this.data.height * 30.48).toString());
 		pokemonLayout = pokemonLayout.replace(/%weight/g, this.data.weight.toString());
 
-		pokemonLayout = pokemonLayout.replace(/%type/g, this.data.types[0]!.type.name); // TODO: ??
-
 		this.parent.innerHTML = pokemonLayout;
 		let img = this.parent.getElementsByClassName("pokeball-img")[0] as HTMLImageElement;
 		img.addEventListener("click", () => this.catch());
