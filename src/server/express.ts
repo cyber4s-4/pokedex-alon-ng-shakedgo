@@ -4,7 +4,7 @@ import express from "express";
 import { promises as fs } from "fs";
 import path from "path";
 import { PokemonData } from "../common/interfaces";
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 const app = express();
 app.use(json());

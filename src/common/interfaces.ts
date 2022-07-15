@@ -38,23 +38,16 @@ export interface MoveData {
 
 export interface PokemonData {
 	abilities: AbilityData[];
-	base_experience: number;
-	forms: any[];
-	game_indices: any[];
 	height: number;
-	held_items: any[];
 	id: number;
 	is_default: boolean;
-	location_area_encounters: string;
-	moves: any[];
+	moves: { move: Pointer }[];
 	name: string;
-	order: number;
-	past_types: any[];
-	species: {};
-	sprites: any;
+	sprites: { front_default: string };
 	stats: { base_stat: number; effort: number; stat: Pointer }[];
-	types: any[];
+	types: { type: Pointer }[];
 	weight: number;
+	parents?: [Pointer, Pointer];
 }
 
 export interface TypeData {
