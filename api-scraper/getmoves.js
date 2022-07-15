@@ -1,7 +1,7 @@
 const fs = require("fs");
-const folderPath = "./api/moves";
+const folderPath = "../src/api/moves";
 
-let allmoves = fetch("https://pokeapi.co/api/v2/move?limit=10000")
+let allmoves = fetch("https://pokeapi.co/api/v2/move?limit=100000&offset=556")
 	.then((res) => res.json())
 	.then((res) => res["results"])
 	.then((res) => res.map((move) => move.url));
@@ -15,7 +15,6 @@ async function run(moves) {
 		let data = await fetch(move).then((res) => res.json());
 		let name = data.name.toString();
 		fs.writeFileSync(folderPath + "/" + name + ".json", JSON.stringify(data));
-		await timer(5000);
 		console.log(name);
 	}
 }
