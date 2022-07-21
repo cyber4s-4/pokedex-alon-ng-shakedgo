@@ -31,16 +31,11 @@ gulp.task("tsc", (cb) => {
 });
 
 // Packs js files
-gulp.task("webpack", async (cb) => {
+gulp.task("webpack", (cb) => {
 	return gulp
 		.src("./dist/client/scripts/*.js")
 		.pipe(webpack(require("./webpack.config")))
 		.pipe(gulp.dest("./dist/static/scripts"));
-});
-
-// Copy api files to dist
-gulp.task("api", (cb) => {
-	return gulp.src("./src/api/**/*").pipe(gulp.dest("./dist/api/"));
 });
 
 // Opens browser at localhost:4000
@@ -87,7 +82,6 @@ gulp.task(
 		"index",
 		"tsc",
 		"webpack",
-		"api",
 		"open-browser",
 		gulp.parallel("express", "watch-scss", "watch-html", "watch-tsc", "tsc-w")
 	)
@@ -101,7 +95,8 @@ gulp.task("start-deploy", () => {
 // Copy dist folder to deploy
 gulp.task("create-deploy", () => {
 	gulp.src(["package.json", "package-lock.json", ".gitignore", "Procfile"]).pipe(gulp.dest("./deploy"));
-	return gulp.src("./dist/**/*").pipe(gulp.dest("./deploy/src"));
+	gulp.src("./dist/**/*").pipe(gulp.dest("./deploy/src"));
+	return gulp.src("./dist/static/scripts/*").pipe(gulp.dest("./deploy/src/static/scripts"));
 });
 
 // Deleted unused deploy files
@@ -112,5 +107,5 @@ gulp.task("delete-unused", () => {
 // Run all together
 gulp.task(
 	"deploy",
-	gulp.series("start", "scss", "index", "tsc", "webpack", "api", "start-deploy", "create-deploy", "delete-unused")
+	gulp.series("start", "scss", "index", "tsc", "webpack", "start-deploy", "create-deploy", "delete-unused")
 );
