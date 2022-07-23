@@ -16,13 +16,15 @@ class Module {
 
 	async getSearchValues(term: string): Promise<{ name: string; url: string }[]> {
 		let allPokemons = await fetch(`/api/pokemon?term=${term}`).then((res) => res.json());
-		let allTypes = await fetch(`/api/type?term=${term}`).then((res) => res.json());
-		let allMoves = await fetch(`/api/move?term=${term}`).then((res) => res.json());
+		// let allTypes = await fetch(`/api/type?term=${term}`).then((res) => res.json());
+		// let allMoves = await fetch(`/api/move?term=${term}`).then((res) => res.json());
 
-		return allPokemons
-			.concat(allTypes)
-			.concat(allMoves)
-			.sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name));
+		return (
+			allPokemons
+				// .concat(allTypes)
+				// .concat(allMoves)
+				.sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name))
+		);
 	}
 
 	updateSearchResults() {

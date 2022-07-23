@@ -1,52 +1,57 @@
-import { Collection, MongoClient } from "mongodb";
-import { MoveData, PokemonData, TypeData } from "src/common/interfaces";
 import { Client } from "pg";
+import { insertPokemonFusion } from "./fusion";
 
-const client = new Client({
-	connectionString:
-		"postgres://tbcbyqnfqcdbfb:3d99741f1aff53453fc6631709822af77a9640b9990ff547385acbc78ac06ee7@ec2-52-205-61-230.compute-1.amazonaws.com:5432/dc0q5rjh31ohvs",
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+const client = process.env.DATABASE_URL
+	? new Client({
+			connectionString: process.env.DATABASE_URL,
+			ssl: {
+				rejectUnauthorized: false,
+			},
+	  })
+	: new Client({
+			host: "localhost",
+			user: "postgres",
+			port: 5432,
+			password: "rootUser",
+			database: "postgres",
+	  });
 
-export async function connectDB() {
-	const uri = `mongodb+srv://cyber4s-pokemon:${encodeURIComponent(
-		"pokemon"
-	)}@cluster.oiwap.mongodb.net/?retryWrites=true&w=majority`;
-	const client = new MongoClient(uri);
-	await client.connect();
-	let db = client.db("pokedex");
-	return db;
+export async function connect() {
+	client.connect();
+	return client;
 }
 
-let pokemonCollection: Collection<PokemonData>,
-	movesCollection: Collection<MoveData>,
-	typesCollection: Collection<TypeData>;
-connectDB().then((db) => {
-	pokemonCollection = db.collection("pokemons");
-	movesCollection = db.collection("moves");
-	typesCollection = db.collection("types");
-});
-
 export async function createTable(client: Client) {
-	client.query("DROP TABLE IF EXISTS pokedex");
-	let text = "CREATE TABLE pokedex (id SERIAL PRIMARY KEY,name VARCHAR(255) NOT NULL,height INTEGER,weight INTEGER);";
-	client.query(text, (err) => {
-		if (err) throw err;
-	});
+	await client.query("DROP TABLE IF EXISTS pokemons");
+	let text = `CREATE TABLE pokemons 
+	(id INTEGER PRIMARY KEY,
+		name VARCHAR(255) NOT NULL,
+		height INTEGER,
+		weight INTEGER, 
+		sprite VARCHAR(255) NOT NULL,
+		hp INTEGER,
+		attack INTEGER,
+		defense INTEGER,
+		specialAttack INTEGER,
+		specialDefense INTEGER,
+		speed INTEGER,
+		types TEXT[]);`;
+	return client.query(text);
 }
 
 export async function insertTable(client: Client) {
-	// let insert = "INSERT INTO pokedex (id,licenseDate ,name, height, weight) VALUES ";
-	// let pokemonJson = pokemonCollection.find({}).toArray();
-	// console.log(pokemonJson);
-	// for (let i = 0; i < statements.length; i++) {
-	// 	let rowVals = Object.values(statements[i]).slice(0, 6);
-	// 	insert += `(${rowVals[0]},'${rowVals[1]}','${rowVals[2]}','${rowVals[3]}','${rowVals[4]}','${rowVals[5]}'),`;
-	// }
-	// insert = insert.slice(0, insert.length - 1) + ";";
-	// client.query("select * from pokedex").catch();
+	// Randomly insert around 7000 fused pokemons to the database.
+	insertPokemonFusion(client);
 }
-createTable(client);
+
+export async function getPokemons(client: Client, searchTerm: string) {
+	const sql = "SELECT name FROM pokemons WHERE name LIKE $1;";
+	return (await client.query(sql, [searchTerm + "%"])).rows.map((p) => p.name);
+}
+
+export async function getPokemon(client: Client, name: string) {
+	const sql = "SELECT * FROM pokemons WHERE name=$1;";
+	return (await client.query(sql, [name])).rows[0];
+}
+
 insertTable(client);

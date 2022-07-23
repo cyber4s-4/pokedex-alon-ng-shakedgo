@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 import { Client } from "pg";
+import { createTable } from "./postgres";
 
 interface Pointer {
 	name: string;
@@ -20,24 +21,7 @@ interface PokemonData {
 	parents?: [Pointer, Pointer];
 }
 
-const client = process.env.DATABASE_URL
-	? new Client({
-			connectionString: process.env.DATABASE_URL,
-			ssl: {
-				rejectUnauthorized: false,
-			},
-	  })
-	: new Client({
-			host: "localhost",
-			user: "postgres",
-			port: 5432,
-			password: "rootUser",
-			database: "postgres",
-	  });
-
-client.connect();
-
-let pokemonData = {
+let pokemonData: { [_: number]: { name: string; fusionId: string } } = {
 	1: { name: "bulbasaur", fusionId: "1" },
 	2: { name: "ivysaur", fusionId: "2" },
 	3: { name: "venusaur", fusionId: "3" },
@@ -462,32 +446,23 @@ let pokemonData = {
 
 let idCounter = 421;
 let spriteURL = "https://raw.githubusercontent.com/Aegide/autogen-fusion-sprites/master/Battlers/%id1/%id1.%id2.png";
-export async function insertPokemonFusion(client) {
+export async function insertPokemonFusion(client: Client) {
 	await createTable(client);
 	let sql = "INSERT INTO pokemons VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING name";
-	let files = await fs.readdir("../temp_pokemons");
+	console.log();
+
+	let files = await fs.readdir(__dirname + "/../temp_pokemons/");
 
 	for (const file1 of files) {
-		const pokemon1: PokemonData = await require("../temp_pokemons/" + file1);
+		const pokemon1: PokemonData = await require(__dirname + "/../temp_pokemons/" + file1);
 		for (const file2 of files) {
-			const pokemon2: PokemonData = await require("../temp_pokemons/" + file2);
-			let id1 = pokemonData[pokemon1.id].fusionId;
-			let id2 = pokemonData[pokemon2.id].fusionId;
+			const pokemon2: PokemonData = await require(__dirname + "/../temp_pokemons/" + file2);
 
 			if (Math.random() < 0.04) {
 				const fusedPokemon = fuse(pokemon1, pokemon2);
 
-				client
-					.query(sql, fusedPokemon)
-					.then((res) => console.log(res.rows[0].name))
-					.catch(console.log);
+				client.query(sql, fusedPokemon).catch(console.log);
 			}
-
-			// pokemonsTemp.push(fusedPokemon);
-			// if (idCounter % 100 === 0) {
-			// 	await pokemons.insertMany(pokemonsTemp);
-			// 	pokemonsTemp = [];
-			// }
 		}
 	}
 }
@@ -498,8 +473,8 @@ function fuse(pokemon1: PokemonData, pokemon2: PokemonData) {
 	let stats = getRandomStats(pokemon1, pokemon2);
 
 	let types = getRandomCollection(pokemon1, pokemon2, "types")
-		.filter((value, index, self) => index === self.findIndex((t) => t.type.name === value.type.name))
-		.map((t) => t.type.name);
+		.filter((value: any, index: any, self: any) => index === self.findIndex((t: any) => t.type.name === value.type.name))
+		.map((t: any) => t.type.name);
 	return [
 		idCounter++,
 		pokemon1.name.slice(0, pokemon1.name.length / 2) + pokemon2.name.slice(pokemon2.name.length / 2, pokemon2.name.length),
@@ -516,31 +491,15 @@ function fuse(pokemon1: PokemonData, pokemon2: PokemonData) {
 	];
 }
 
-async function createTable(client: Client) {
-	await client.query("DROP TABLE IF EXISTS pokemons");
-	let text = `CREATE TABLE pokemons 
-	(id INTEGER PRIMARY KEY,
-		name VARCHAR(255) NOT NULL,
-		height INTEGER,
-		weight INTEGER, 
-		sprite VARCHAR(255) NOT NULL,
-		hp INTEGER,
-		attack INTEGER,
-		defense INTEGER,
-		specialAttack INTEGER,
-		specialDefense INTEGER,
-		speed INTEGER,
-		types TEXT[]);`;
-	return client.query(text);
-}
-
 function getRandomInRange(min: number, max: number): number {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function getRandomCollection(pokemon1: PokemonData, pokemon2: PokemonData, collectionName: string) {
+	// @ts-ignore
 	let collection = pokemon1[collectionName].concat(pokemon2[collectionName]).filter(() => Math.random() < (collectionName === "moves" ? 0.25 : 0.5));
 	if (collection.length === 0) {
+		// @ts-ignore
 		collection.push(pokemon1[collectionName][0]);
 	}
 	return collection;
@@ -569,5 +528,3 @@ function getRandomStats(pokemon1: PokemonData, pokemon2: PokemonData) {
 // 		}
 // 	});
 // }
-
-insertPokemonFusion();

@@ -18,6 +18,11 @@ gulp.task("index", () => {
 	return gulp.src(["./src/client/html/*.html", "./src/client/favicon.ico"]).pipe(gulp.dest(STATIC_FOLDER));
 });
 
+// Transfers pokemons
+gulp.task("pokemons", () => {
+	return gulp.src("./src/temp_pokemons/*.json").pipe(gulp.dest("./dist/temp_pokemons"));
+});
+
 // Converts scss to css
 gulp.task("scss", () => {
 	return gulp.src("./src/client/style/*.scss").pipe(sass()).pipe(gulp.dest(STATIC_FOLDER));
@@ -80,9 +85,10 @@ gulp.task(
 		"start",
 		"scss",
 		"index",
+		"pokemons",
 		"tsc",
 		"webpack",
-		"open-browser",
+		// "open-browser",
 		gulp.parallel("express", "watch-scss", "watch-html", "watch-tsc", "tsc-w")
 	)
 );
@@ -96,6 +102,7 @@ gulp.task("start-deploy", () => {
 gulp.task("create-deploy", () => {
 	gulp.src(["package.json", "package-lock.json", ".gitignore", "Procfile"]).pipe(gulp.dest("./deploy"));
 	gulp.src("./dist/**/*").pipe(gulp.dest("./deploy/src"));
+	gulp.src("./src/temp_pokemons/*.json").pipe(gulp.dest("./deploy/src/temp_pokemons"));
 	return gulp.src("./dist/static/scripts/*").pipe(gulp.dest("./deploy/src/static/scripts"));
 });
 
@@ -105,7 +112,4 @@ gulp.task("delete-unused", () => {
 });
 
 // Run all together
-gulp.task(
-	"deploy",
-	gulp.series("start", "scss", "index", "tsc", "webpack", "start-deploy", "create-deploy", "delete-unused")
-);
+gulp.task("deploy", gulp.series("start", "scss", "index", "tsc", "webpack", "start-deploy", "create-deploy", "delete-unused"));

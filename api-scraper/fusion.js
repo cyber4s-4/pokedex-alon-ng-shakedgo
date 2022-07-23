@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,9 +35,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+exports.__esModule = true;
+exports.createTable = void 0;
 var fs = require("fs/promises");
 var MongoClient = require("mongodb").MongoClient;
+var pg_1 = require("pg");
 var url = "mongodb+srv://cyber4s-pokemon:".concat(encodeURIComponent("pokemon"), "@cluster.oiwap.mongodb.net/?retryWrites=true&w=majority");
+var client = new pg_1.Client({
+    host: "localhost",
+    user: "postgres",
+    port: 5432,
+    password: "rootUser",
+    database: "postgres"
+});
+client.connect();
 var pokemonData = {
     1: { name: "bulbasaur", fusionId: "1" },
     2: { name: "ivysaur", fusionId: "2" },
@@ -463,131 +475,94 @@ var idCounter = 421;
 var spriteURL = "https://raw.githubusercontent.com/Aegide/autogen-fusion-sprites/master/Battlers/%id1/%id1.%id2.png";
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var client;
-        var _this = this;
-        return __generator(this, function (_a) {
-            client = new MongoClient(url);
-            client.connect(function (err) { return __awaiter(_this, void 0, void 0, function () {
-                var pokemons, pokemonsTemp, files, _i, files_1, file1, pokemon1, _a, files_2, file2, pokemon2, id1, id2, fusedPokemon;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            pokemons = client.db("pokedex").collection("pokemons");
-                            pokemonsTemp = [];
-                            return [4 /*yield*/, fs.readdir("../temp_pokemons")];
-                        case 1:
-                            files = _b.sent();
-                            _i = 0, files_1 = files;
-                            _b.label = 2;
-                        case 2:
-                            if (!(_i < files_1.length)) return [3 /*break*/, 9];
-                            file1 = files_1[_i];
-                            return [4 /*yield*/, require("../temp_pokemons/" + file1)];
-                        case 3:
-                            pokemon1 = _b.sent();
-                            _a = 0, files_2 = files;
-                            _b.label = 4;
-                        case 4:
-                            if (!(_a < files_2.length)) return [3 /*break*/, 8];
-                            file2 = files_2[_a];
-                            return [4 /*yield*/, require("../temp_pokemons/" + file2)];
-                        case 5:
-                            pokemon2 = _b.sent();
-                            id1 = pokemonData[pokemon1.id].fusionId;
-                            id2 = pokemonData[pokemon2.id].fusionId;
-                            fusedPokemon = fuse(pokemon1, pokemon2);
-                            pokemonsTemp.push(fusedPokemon);
-                            if (!(idCounter % 100 === 0)) return [3 /*break*/, 7];
-                            return [4 /*yield*/, pokemons.insertMany(pokemonsTemp)];
-                        case 6:
-                            _b.sent();
-                            pokemonsTemp = [];
-                            _b.label = 7;
-                        case 7:
-                            _a++;
-                            return [3 /*break*/, 4];
-                        case 8:
-                            _i++;
-                            return [3 /*break*/, 2];
-                        case 9: return [2 /*return*/];
+        var sql, files, _i, files_1, file1, pokemon1, _a, files_2, file2, pokemon2, id1, id2, fusedPokemon;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, createTable(client)];
+                case 1:
+                    _b.sent();
+                    sql = "INSERT INTO pokemons VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING name";
+                    return [4 /*yield*/, fs.readdir("../temp_pokemons")];
+                case 2:
+                    files = _b.sent();
+                    _i = 0, files_1 = files;
+                    _b.label = 3;
+                case 3:
+                    if (!(_i < files_1.length)) return [3 /*break*/, 9];
+                    file1 = files_1[_i];
+                    return [4 /*yield*/, require("../temp_pokemons/" + file1)];
+                case 4:
+                    pokemon1 = _b.sent();
+                    _a = 0, files_2 = files;
+                    _b.label = 5;
+                case 5:
+                    if (!(_a < files_2.length)) return [3 /*break*/, 8];
+                    file2 = files_2[_a];
+                    return [4 /*yield*/, require("../temp_pokemons/" + file2)];
+                case 6:
+                    pokemon2 = _b.sent();
+                    id1 = pokemonData[pokemon1.id].fusionId;
+                    id2 = pokemonData[pokemon2.id].fusionId;
+                    if (Math.random() < 0.04) {
+                        fusedPokemon = fuse(pokemon1, pokemon2);
+                        client
+                            .query(sql, fusedPokemon)
+                            .then(function (res) { return console.log(res.rows[0].name); })["catch"](console.log);
                     }
-                });
-            }); });
-            return [2 /*return*/];
+                    _b.label = 7;
+                case 7:
+                    _a++;
+                    return [3 /*break*/, 5];
+                case 8:
+                    _i++;
+                    return [3 /*break*/, 3];
+                case 9: return [2 /*return*/];
+            }
         });
     });
 }
-function fixAbra() {
-    return __awaiter(this, void 0, void 0, function () {
-        var client;
-        var _this = this;
-        return __generator(this, function (_a) {
-            client = new MongoClient(url);
-            client.connect(function (err) { return __awaiter(_this, void 0, void 0, function () {
-                var pokemons, pokemonsTemp, files, abra, _i, files_3, file, pokemon;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            pokemons = client.db("pokedex").collection("pokemons");
-                            pokemonsTemp = [];
-                            return [4 /*yield*/, fs.readdir("../temp_pokemons")];
-                        case 1:
-                            files = _a.sent();
-                            return [4 /*yield*/, require("../temp_pokemons/abra.json")];
-                        case 2:
-                            abra = _a.sent();
-                            _i = 0, files_3 = files;
-                            _a.label = 3;
-                        case 3:
-                            if (!(_i < files_3.length)) return [3 /*break*/, 6];
-                            file = files_3[_i];
-                            return [4 /*yield*/, require("../temp_pokemons/" + file)];
-                        case 4:
-                            pokemon = _a.sent();
-                            pokemons.insert(fuse(abra, pokemon));
-                            pokemons.insert(fuse(pokemon, abra));
-                            _a.label = 5;
-                        case 5:
-                            _i++;
-                            return [3 /*break*/, 3];
-                        case 6: return [2 /*return*/];
-                    }
-                });
-            }); });
-            return [2 /*return*/];
-        });
-    });
-}
-fixAbra();
-idCounter = 176800;
 function fuse(pokemon1, pokemon2) {
     var id1 = pokemonData[pokemon1.id].fusionId;
     var id2 = pokemonData[pokemon2.id].fusionId;
-    return {
-        abilities: getRandomCollection(pokemon1, pokemon2, "abilities").filter(function (value, index, self) { return index === self.findIndex(function (a) { return a.name === value.name; }); }),
-        height: getRandomInRange(Math.min(pokemon1.height, pokemon2.height), Math.max(pokemon1.height, pokemon2.height)),
-        id: idCounter++,
-        is_default: false,
-        moves: Array.from(new Set(getRandomCollection(pokemon1, pokemon2, "moves"))),
-        name: pokemon1.name.slice(0, pokemon1.name.length / 2) +
-            pokemon2.name.slice(pokemon2.name.length / 2, pokemon2.name.length),
-        sprites: { front_default: spriteURL.replace(/%id1/g, id1).replace(/%id2/g, id2) },
-        stats: getRandomStats(pokemon1, pokemon2),
-        types: getRandomCollection(pokemon1, pokemon2, "types").filter(function (value, index, self) { return index === self.findIndex(function (t) { return t.type.name === value.type.name; }); }),
-        weight: getRandomInRange(Math.min(pokemon1.weight, pokemon2.weight), Math.max(pokemon1.weight, pokemon2.weight)),
-        parents: [
-            { name: pokemon1.name, url: "/pokemon/".concat(pokemon1.name) },
-            { name: pokemon2.name, url: "/pokemon/".concat(pokemon2.name) },
-        ]
-    };
+    var stats = getRandomStats(pokemon1, pokemon2);
+    var types = getRandomCollection(pokemon1, pokemon2, "types")
+        .filter(function (value, index, self) { return index === self.findIndex(function (t) { return t.type.name === value.type.name; }); })
+        .map(function (t) { return t.type.name; });
+    return [
+        idCounter++,
+        pokemon1.name.slice(0, pokemon1.name.length / 2) + pokemon2.name.slice(pokemon2.name.length / 2, pokemon2.name.length),
+        getRandomInRange(Math.min(pokemon1.height, pokemon2.height), Math.max(pokemon1.height, pokemon2.height)),
+        getRandomInRange(Math.min(pokemon1.weight, pokemon2.weight), Math.max(pokemon1.weight, pokemon2.weight)),
+        spriteURL.replace(/%id1/g, id1).replace(/%id2/g, id2),
+        stats[0].base_stat,
+        stats[1].base_stat,
+        stats[2].base_stat,
+        stats[3].base_stat,
+        stats[4].base_stat,
+        stats[5].base_stat,
+        types,
+    ];
 }
+function createTable(client) {
+    return __awaiter(this, void 0, void 0, function () {
+        var text;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, client.query("DROP TABLE IF EXISTS pokemons")];
+                case 1:
+                    _a.sent();
+                    text = "CREATE TABLE pokemons \n\t(id INTEGER PRIMARY KEY,\n\t\tname VARCHAR(255) NOT NULL,\n\t\theight INTEGER,\n\t\tweight INTEGER, \n\t\tsprite VARCHAR(255) NOT NULL,\n\t\thp INTEGER,\n\t\tattack INTEGER,\n\t\tdefense INTEGER,\n\t\tspecialAttack INTEGER,\n\t\tspecialDefense INTEGER,\n\t\tspeed INTEGER,\n\t\ttypes TEXT[]);";
+                    return [2 /*return*/, client.query(text)];
+            }
+        });
+    });
+}
+exports.createTable = createTable;
 function getRandomInRange(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 function getRandomCollection(pokemon1, pokemon2, collectionName) {
-    var collection = pokemon1[collectionName]
-        .concat(pokemon2[collectionName])
-        .filter(function () { return Math.random() < (collectionName === "moves" ? 0.25 : 0.5); });
+    var collection = pokemon1[collectionName].concat(pokemon2[collectionName]).filter(function () { return Math.random() < (collectionName === "moves" ? 0.25 : 0.5); });
     if (collection.length === 0) {
         collection.push(pokemon1[collectionName][0]);
     }
@@ -611,7 +586,7 @@ function main2() {
         return __generator(this, function (_a) {
             client = new MongoClient(url);
             client.connect(function (err) { return __awaiter(_this, void 0, void 0, function () {
-                var pokemons, files, _i, files_4, file1, pokemon1;
+                var pokemons, files, _i, files_3, file1, pokemon1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -619,11 +594,11 @@ function main2() {
                             return [4 /*yield*/, fs.readdir("./pokemons")];
                         case 1:
                             files = _a.sent();
-                            _i = 0, files_4 = files;
+                            _i = 0, files_3 = files;
                             _a.label = 2;
                         case 2:
-                            if (!(_i < files_4.length)) return [3 /*break*/, 6];
-                            file1 = files_4[_i];
+                            if (!(_i < files_3.length)) return [3 /*break*/, 6];
+                            file1 = files_3[_i];
                             return [4 /*yield*/, require("./pokemons/" + file1)];
                         case 3:
                             pokemon1 = _a.sent();
@@ -642,3 +617,4 @@ function main2() {
         });
     });
 }
+main();
