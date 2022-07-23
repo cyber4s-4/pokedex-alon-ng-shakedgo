@@ -4,6 +4,7 @@ import express from "express";
 import path from "path";
 import { MoveData, PokemonData, TypeData } from "../common/interfaces";
 import { Collection, MongoClient, WithId } from "mongodb";
+import { Client } from "pg";
 const port = process.env.PORT || 4000;
 
 export async function connectDB() {
@@ -15,10 +16,16 @@ export async function connectDB() {
 	let db = client.db("pokedex");
 	return db;
 }
+const client = new Client({
+	connectionString: "",
+	ssl: {
+		rejectUnauthorized: false,
+	},
+});
 
-let pokemonCollection: Collection<PokemonData>,
-	movesCollection: Collection<MoveData>,
-	typesCollection: Collection<TypeData>;
+// let pokemonCollection: Collection<PokemonData>,
+// 	movesCollection: Collection<MoveData>,
+// 	typesCollection: Collection<TypeData>;
 connectDB().then((db) => {
 	pokemonCollection = db.collection("pokemons");
 	movesCollection = db.collection("moves");
